@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tanjin Adnan Abir</title>
+<meta name="description" content="Tanjin Adnan Abir — a computer scientist, researcher and engineer working across AI, neuroscience, quantum computing and physics.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   TOKENS
+   ============================================================ */
+:root{
+  --bg:            #F5F4EF;
+  --bg-alt:        #FFFFFF;
+  --bg-sunk:       #EAE8E0;
+  --panel:         #FFFFFF;
+  --line:          rgba(15,17,15,0.10);
+  --line-strong:   rgba(15,17,15,0.20);
+  --text:          #15171A;
+  --text-dim:      #52565F;
+  --text-faint:    #8A8E97;
+  --accent:        #0E7C74;
+  --accent-soft:   rgba(14,124,116,0.10);
+  --accent-2:      #A66A00;
+  --accent-2-soft: rgba(166,106,0,0.10);
+  --accent-3:      #6D3FC0;
+  --accent-3-soft: rgba(109,63,192,0.10);
+  --shadow:        0 20px 60px rgba(20,20,15,0.08);
+  --overlay:       rgba(20,18,14,0.55);
+  --serif:  'Fraunces', Georgia, serif;
+  --sans:   'Manrope', -apple-system, sans-serif;
+  --mono:   'IBM Plex Mono', monospace;
+  --radius: 14px;
+  --radius-sm: 8px;
+  --ease: cubic-bezier(.22,.68,0,1);
+}
+html[data-theme="dark"]{
+  --bg:            #0A0C10;
+  --bg-alt:        #0E1116;
+  --bg-sunk:       #06070A;
+  --panel:         #12151B;
+  --line:          rgba(255,255,255,0.08);
+  --line-strong:   rgba(255,255,255,0.16);
+  --text:          #E9EAEC;
+  --text-dim:      #9CA0AB;
+  --text-faint:    #62666F;
+  --accent:        #4FD1C0;
+  --accent-soft:   rgba(79,209,192,0.12);
+  --accent-2:      #F0B429;
+  --accent-2-soft: rgba(240,180,41,0.12);
+  --accent-3:      #B79CFF;
+  --accent-3-soft: rgba(183,156,255,0.12);
+  --shadow:        0 24px 70px rgba(0,0,0,0.5);
+  --overlay:       rgba(3,4,6,0.72);
+}
+
+*,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
+html{ scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior:auto; }
+  *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans); line-height:1.6;
+  overflow-x:hidden;
+  transition:background .35s var(--ease), color .35s var(--ease);
+  -webkit-font-smoothing:antialiased;
+}
+body.modal-lock{ overflow:hidden; }
+::selection{ background:var(--accent); color:var(--bg-sunk); }
+a{ color:inherit; }
+img{ max-width:100%; display:block; }
+button{ font:inherit; }
+
+.wrap{ max-width:1180px; margin:0 auto; padding-inline:2rem; position:relative; z-index:1; }
+@media (max-width:640px){ .wrap{ padding-inline:1.25rem; } }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  border-bottom:1px solid var(--line);
+  height:64px; display:flex; align-items:center;
+  /* no backdrop-filter / transform / filter here on purpose — any of those on
+     this element would create a new containing block, trapping the fixed-position
+     .nav-links mobile panel inside this 64px bar instead of the viewport. The blur
+     lives on ::before below, which is a sibling of .nav-links, not an ancestor. */
+}
+nav::before{
+  content:''; position:absolute; inset:0; z-index:-1;
+  background:color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter:blur(16px) saturate(140%);
+}
+.nav-row{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:1.5rem; max-width:1180px; margin:0 auto; padding-inline:2rem; }
+@media (max-width:640px){ .nav-row{ padding-inline:1.25rem; } }
+
+.nav-mark{ display:flex; align-items:center; gap:.6rem; text-decoration:none; flex-shrink:0; }
+.nav-logo{
+  width:38px; height:38px; border-radius:11px; flex-shrink:0; position:relative;
+  background:linear-gradient(155deg, var(--accent-soft), var(--accent-3-soft));
+  border:1px solid var(--line-strong);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--accent);
+  overflow:hidden; transition:transform .3s var(--ease), border-color .3s;
+}
+.nav-logo::after{
+  content:''; position:absolute; inset:-1px; border-radius:12px;
+  background:conic-gradient(from 0deg, var(--accent), var(--accent-3), var(--accent-2), var(--accent));
+  z-index:-1; opacity:0; transition:opacity .35s; animation:spin 6s linear infinite; animation-play-state:paused;
+}
+.nav-mark:hover .nav-logo{ transform:rotate(-6deg) scale(1.05); border-color:transparent; }
+.nav-mark:hover .nav-logo::after{ opacity:1; animation-play-state:running; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.nav-word{ font-family:var(--mono); font-size:.78rem; letter-spacing:.02em; color:var(--text-dim); font-weight:500; }
+@media (max-width:560px){ .nav-word{ display:none; } }
+
+.nav-links{ display:flex; align-items:center; gap:.1rem; list-style:none; }
+.nav-links a{
+  display:block; padding:.5rem .78rem; text-decoration:none;
+  color:var(--text-dim); font-size:.83rem; font-weight:600;
+  border-radius:100px; position:relative; transition:color .2s, background .2s; white-space:nowrap;
+}
+.nav-links a:hover{ color:var(--text); background:var(--accent-soft); }
+.nav-links a.active{ color:var(--accent); }
+.nav-right{ display:flex; align-items:center; gap:.7rem; }
+
+.theme-toggle{
+  width:56px; height:30px; border-radius:100px; border:1px solid var(--line-strong);
+  background:var(--bg-sunk); position:relative; cursor:pointer; flex-shrink:0;
+  transition:background .3s, border-color .3s; padding:0;
+}
+.theme-toggle .track-icon{
+  position:absolute; top:50%; transform:translateY(-50%); font-size:.72rem; opacity:.5;
+  display:flex; align-items:center; justify-content:center; width:16px; height:16px;
+}
+.theme-toggle .sun{ left:6px; }
+.theme-toggle .moon{ right:6px; }
+.theme-toggle .knob{
+  position:absolute; top:3px; left:3px; width:22px; height:22px; border-radius:50%;
+  background:var(--accent); transition:transform .4s var(--ease), background .3s;
+  box-shadow:0 2px 8px rgba(0,0,0,.25);
+}
+html[data-theme="dark"] .theme-toggle .knob{ transform:translateX(26px); }
+
+.hamburger{
+  display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; z-index:220;
+}
+.hamburger span{ width:20px; height:2px; background:var(--text); border-radius:2px; transition:.25s; }
+.hamburger.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+.hamburger.open span:nth-child(2){ opacity:0; }
+.hamburger.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
+
+@media (max-width:960px){
+  .nav-overlay{
+    position:fixed; top:64px; left:0; right:0; bottom:0; z-index:190;
+    background:rgba(0,0,0,.45); opacity:0; pointer-events:none; transition:opacity .3s var(--ease);
+  }
+  .nav-overlay.open{ opacity:1; pointer-events:auto; }
+  .nav-links{
+    position:fixed; top:64px; right:0; bottom:0; left:auto;
+    width:min(78vw, 300px);
+    background:var(--bg); flex-direction:column; align-items:stretch;
+    padding:.75rem 1.1rem 2rem; gap:.2rem; transform:translateX(100%);
+    transition:transform .3s var(--ease); overflow-y:auto; z-index:210;
+    border-left:1px solid var(--line); box-shadow:-16px 0 40px rgba(0,0,0,.25);
+  }
+  .nav-links.open{ transform:translateX(0); }
+  .nav-links a{ padding:.8rem .9rem; font-size:.96rem; border-bottom:1px solid var(--line); border-radius:0; }
+  .hamburger{ display:flex; }
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.75rem 1.4rem; border-radius:100px; font-size:.88rem; font-weight:700;
+  text-decoration:none; cursor:pointer; border:1px solid transparent;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s, border-color .2s, color .2s;
+}
+.btn-solid{ background:var(--text); color:var(--bg); }
+html[data-theme="dark"] .btn-solid{ background:var(--accent); color:#06110F; }
+.btn-solid:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.18); }
+.btn-line{ background:transparent; color:var(--text); border-color:var(--line-strong); }
+.btn-line:hover{ border-color:var(--accent); color:var(--accent); transform:translateY(-2px); }
+.btn-ghost{ background:transparent; color:var(--text-dim); border-color:transparent; padding:.75rem 1rem; }
+.btn-ghost:hover{ color:var(--accent); }
+
+/* "Get in touch" — a small live-status dot (pulsing ring), a drawing
+   underline, and an arrow that slides in on hover, so this tertiary
+   link reads as an inviting, alive call to action rather than bare text. */
+.btn-pulse{ position:relative; gap:.6rem; }
+.btn-pulse::after{
+  content:''; position:absolute; left:2.05rem; right:1rem; bottom:.55rem; height:1px;
+  background:var(--accent); transform:scaleX(0); transform-origin:left;
+  transition:transform .35s var(--ease);
+}
+.btn-pulse:hover::after{ transform:scaleX(1); }
+.pulse-dot{
+  position:relative; width:8px; height:8px; border-radius:50%; background:var(--accent);
+  flex-shrink:0; display:inline-block;
+}
+.pulse-ring{
+  position:absolute; inset:-5px; border-radius:50%; border:1.5px solid var(--accent);
+  animation:pulseRing 2.2s ease-out infinite;
+}
+@keyframes pulseRing{
+  0%{ transform:scale(0.5); opacity:.9; }
+  100%{ transform:scale(1.9); opacity:0; }
+}
+.pulse-arrow{ width:15px; height:15px; transition:transform .3s var(--ease); }
+.btn-pulse:hover .pulse-arrow{ transform:translateX(4px); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#home{ position:relative; padding-top:64px; min-height:96vh; display:flex; align-items:center; overflow:hidden; }
+#heroBgCanvas, #fieldCanvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; }
+#heroBgCanvas{ opacity:.75; }
+#home::after{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(60% 50% at 15% 15%, var(--accent-soft), transparent 70%),
+    radial-gradient(50% 45% at 90% 85%, var(--accent-3-soft), transparent 70%);
+}
+
+.hero-center{
+  width:100%; max-width:960px; margin:0 auto; padding-block:3.5rem;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+}
+
+.hero-kicker{
+  display:inline-flex; align-items:center; gap:.55rem; font-family:var(--mono); font-size:.78rem;
+  color:var(--accent); background:var(--accent-soft); border:1px solid var(--accent-soft);
+  padding:.4rem .85rem; border-radius:100px; margin-bottom:1.8rem; min-height:2rem;
+}
+.hero-kicker .cursor{ display:inline-block; width:2px; height:12px; background:var(--accent); animation:blink 1s steps(1) infinite; }
+@keyframes blink{ 50%{ opacity:0; } }
+
+.hero-name{
+  font-family:var(--serif); font-optical-sizing:auto;
+  font-size:clamp(2.4rem, 5.6vw, 4.4rem); font-weight:600; line-height:1.05; letter-spacing:-0.02em;
+  margin-bottom:1.5rem; color:var(--text); white-space:nowrap;
+  text-shadow:0 2px 24px var(--bg), 0 0 60px var(--bg);
+}
+.hero-name .last{ color:var(--accent); }
+@media (max-width:760px){ .hero-name{ white-space:normal; } }
+
+.hero-desc{
+  font-size:1.1rem; color:var(--text-dim); line-height:1.8; max-width:700px; margin:0 auto 2.3rem;
+  text-shadow:0 2px 16px var(--bg);
+}
+.hero-desc strong{ color:var(--text); font-weight:700; }
+
+.hero-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:.75rem; margin-bottom:2.3rem; }
+
+.hero-socials{ display:flex; flex-wrap:wrap; justify-content:center; gap:.5rem; margin-bottom:2.6rem; }
+.social-icon{
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--line-strong);
+  display:flex; align-items:center; justify-content:center; color:var(--text-dim);
+  text-decoration:none; transition:.2s; background:var(--bg);
+}
+.social-icon svg{ width:16px; height:16px; fill:currentColor; }
+.behance-icon{ font-family:var(--serif); font-weight:700; font-size:.78rem; letter-spacing:-0.02em; }
+.social-icon:hover{ color:var(--accent); border-color:var(--accent); transform:translateY(-2px); }
+
+.hero-stats{ display:flex; justify-content:center; gap:2.6rem; flex-wrap:wrap; }
+.hero-stats .stat{ text-align:center; }
+.hero-stats .stat b{ display:block; font-family:var(--serif); font-size:1.8rem; font-weight:600; color:var(--text); }
+.hero-stats .stat span{ font-size:.78rem; color:var(--text-faint); }
+@media (max-width:640px){ .hero-center{ padding-block:2.5rem; } .hero-stats{ gap:1.6rem 2rem; } }
+
+/* ============================================================
+   SECTION PATTERN
+   ============================================================ */
+section{ position:relative; }
+.section-pad{ padding-block:6rem; }
+@media (max-width:640px){ .section-pad{ padding-block:4rem; } }
+.section-head{ max-width:640px; margin-bottom:3rem; display:flex; align-items:flex-end; justify-content:space-between; gap:1.5rem; flex-wrap:wrap; }
+.section-head-text{ max-width:600px; }
+.section-tag{
+  display:inline-flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.76rem;
+  color:var(--accent); margin-bottom:.9rem;
+}
+.section-tag::before{ content:''; width:16px; height:1px; background:var(--accent); }
+.section-title{
+  font-family:var(--serif); font-size:clamp(1.7rem,3.4vw,2.5rem); font-weight:600; letter-spacing:-0.01em;
+  line-height:1.12; margin-bottom:.75rem;
+}
+.section-sub{ color:var(--text-dim); font-size:1rem; line-height:1.7; }
+.divider{ height:1px; background:var(--line); position:relative; z-index:1; }
+.alt-bg{ background:var(--bg-alt); }
+
+/* ============================================================
+   SECTION BACKGROUND ANIMATION — every section (hero included)
+   shares the same interactive canvas: a combined space / neural-
+   network / quantum-particle field. Kept subtle and consistent
+   site-wide rather than a different motif per section.
+   ============================================================ */
+section{ overflow:hidden; }
+.section-bg{ position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+.section-bg .blob{
+  position:absolute; border-radius:50%; filter:blur(64px);
+  opacity:.14; mix-blend-mode:screen; will-change:transform;
+}
+html:not([data-theme="dark"]) .section-bg .blob{ opacity:.18; mix-blend-mode:multiply; filter:blur(56px); }
+.section-bg .b1{ width:34vw; height:34vw; max-width:460px; max-height:460px; top:-10%; left:-8%; background:var(--accent); animation:driftA 30s ease-in-out infinite alternate; }
+.section-bg .b2{ width:28vw; height:28vw; max-width:380px; max-height:380px; bottom:-12%; right:-6%; background:var(--accent-3); animation:driftB 34s ease-in-out infinite alternate; }
+@keyframes driftA{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(6vw,4vh) scale(1.12); } }
+@keyframes driftB{ from{ transform:translate(0,0) scale(1); } to{ transform:translate(-5vw,-6vh) scale(1.08); } }
+.section-particle-canvas{ position:absolute; inset:0; width:100%; height:100%; }
+
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.about-intro{ display:grid; grid-template-columns:1.3fr 1fr; gap:3rem; margin-bottom:3.5rem; align-items:start; }
+@media (max-width:900px){ .about-intro{ grid-template-columns:1fr; } }
+.about-text p{ color:var(--text-dim); font-size:1rem; line-height:1.85; margin-bottom:1.1rem; }
+.about-text p:last-child{ margin-bottom:1.6rem; }
+.about-text strong{ color:var(--text); font-weight:700; }
+.about-text .mark{ color:var(--accent); font-weight:700; }
+
+.about-side{ display:flex; flex-direction:column; gap:1.5rem; }
+.avatar-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.7rem 1.5rem; text-align:center; position:relative; overflow:hidden;
+}
+.avatar-card::before{ content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(to right, var(--accent), var(--accent-3), var(--accent-2)); }
+.avatar-photo{
+  width:148px; height:148px; border-radius:50%; margin:0 auto 1rem; position:relative;
+  border:2px solid var(--line-strong); overflow:hidden; background:var(--bg-sunk);
+  display:flex; align-items:center; justify-content:center;
+}
+.avatar-photo img{ width:100%; height:100%; object-fit:cover; display:block; }
+.avatar-photo .fallback{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:var(--serif); font-size:1.9rem; font-weight:600; color:var(--accent);
+  background:linear-gradient(155deg, var(--accent-soft), var(--accent-3-soft));
+}
+.avatar-name{ font-family:var(--serif); font-size:1.15rem; font-weight:600; margin-bottom:.2rem; }
+.avatar-role{ font-family:var(--mono); font-size:.7rem; color:var(--accent); text-transform:none; margin-bottom:1rem; }
+.avatar-badges{ display:flex; flex-wrap:wrap; gap:.35rem; justify-content:center; margin-bottom:1rem; }
+.avatar-badge{ font-size:.68rem; font-weight:700; padding:.2rem .55rem; border-radius:100px; }
+.avatar-badge.c1{ background:var(--accent-soft); color:var(--accent); }
+.avatar-badge.c2{ background:var(--accent-2-soft); color:var(--accent-2); }
+.avatar-badge.c3{ background:var(--accent-3-soft); color:var(--accent-3); }
+.avatar-loc{ font-size:.78rem; color:var(--text-faint); }
+
+.fact-list{ display:flex; flex-direction:column; gap:0; border-top:1px solid var(--line); }
+.fact-row{
+  display:flex; justify-content:space-between; gap:1rem; padding:.8rem 0; border-bottom:1px solid var(--line);
+  font-size:.85rem;
+}
+.fact-row span:first-child{ color:var(--text-faint); }
+.fact-row span:last-child{ color:var(--text); font-weight:600; text-align:right; }
+
+.skills-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1.1rem; margin-bottom:3rem; }
+@media (max-width:960px){ .skills-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:560px){ .skills-grid{ grid-template-columns:1fr; } }
+.skill-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:1.5rem;
+  transition:transform .25s var(--ease), border-color .25s, box-shadow .25s;
+}
+.skill-card:hover{ transform:translateY(-4px); border-color:var(--line-strong); box-shadow:var(--shadow); }
+.skill-icon{ width:36px; height:36px; margin-bottom:1rem; color:var(--accent); }
+.skill-icon svg{ width:100%; height:100%; }
+.skill-card h4{ font-size:.98rem; font-weight:700; margin-bottom:.5rem; }
+.skill-card p{ font-size:.83rem; color:var(--text-dim); line-height:1.6; margin-bottom:1rem; }
+.mini-tags{ display:flex; flex-wrap:wrap; gap:.35rem; }
+.mini-tag{
+  font-family:var(--mono); font-size:.68rem; padding:.2rem .55rem; border-radius:100px;
+  border:1px solid var(--line-strong); color:var(--text-faint);
+}
+
+.stack-wrap{ display:flex; flex-wrap:wrap; gap:.55rem; }
+.stack-chip{
+  display:flex; align-items:center; gap:.5rem; font-family:var(--mono); font-size:.8rem;
+  padding:.45rem .9rem; border:1px solid var(--line); border-radius:100px; color:var(--text-dim);
+  transition:.2s;
+}
+.stack-chip:hover{ border-color:var(--accent); color:var(--text); background:var(--accent-soft); }
+.stack-chip i{ width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+
+.more-btn-row{ display:flex; justify-content:flex-start; margin-top:.4rem; }
+.btn-more{
+  display:inline-flex; align-items:center; gap:.55rem; background:transparent;
+  border:1px solid var(--line-strong); color:var(--text); padding:.7rem 1.4rem; border-radius:100px;
+  cursor:pointer; font-weight:700; font-size:.85rem; transition:.2s;
+}
+.btn-more:hover{ border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+.btn-more svg{ width:15px; height:15px; transition:transform .2s; }
+.btn-more:hover svg{ transform:translateX(3px); }
+
+/* centered show-more (projects/certs/hobbies/writing) */
+.show-more-wrap{ display:flex; justify-content:center; margin-top:2.4rem; }
+
+/* ============================================================
+   PROJECTS
+   ============================================================ */
+.card-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.15rem; }
+@media (max-width:960px){ .card-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .card-grid{ grid-template-columns:1fr; } }
+
+.proj-card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:1.6rem; display:flex; flex-direction:column; transition:transform .25s var(--ease), border-color .25s, box-shadow .25s;
+}
+.proj-card:hover{ transform:translateY(-4px); border-color:var(--accent); box-shadow:var(--shadow); }
+.proj-icon{ width:40px; height:40px; border-radius:10px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; margin-bottom:1.1rem; }
+.proj-icon svg{ width:20px; height:20px; }
+.proj-title{ font-size:.98rem; font-weight:700; line-height:1.4; margin-bottom:.55rem; }
+.proj-desc{ font-size:.85rem; color:var(--text-dim); line-height:1.65; flex:1; margin-bottom:1.1rem; }
+.proj-tags{ display:flex; flex-wrap:wrap; gap:.35rem; margin-bottom:1.1rem; }
+.proj-tag{ font-family:var(--mono); font-size:.66rem; padding:.2rem .5rem; border-radius:100px; background:var(--accent-soft); color:var(--accent); }
+.proj-links{ display:flex; gap:.6rem; }
+.proj-link{
+  font-size:.78rem; font-weight:700; padding:.4rem .85rem; border-radius:100px; text-decoration:none;
+  border:1px solid var(--line-strong); color:var(--text-dim); transition:.2s; flex:1; text-align:center;
+}
+.proj-link:hover{ border-color:var(--accent); color:var(--accent); }
+.proj-link.primary{ background:var(--accent-soft); color:var(--accent); border-color:var(--accent-soft); }
+
+/* ============================================================
+   TIMELINE / TABS
+   ============================================================ */
+.tabs{ display:flex; gap:.4rem; margin-bottom:2.6rem; flex-wrap:wrap; }
+.tab-btn{
+  background:transparent; border:1px solid var(--line); color:var(--text-dim); padding:.55rem 1.2rem;
+  border-radius:100px; font-weight:700; font-size:.85rem; cursor:pointer; transition:.2s;
+}
+.tab-btn.active{ background:var(--text); color:var(--bg); border-color:var(--text); }
+html[data-theme="dark"] .tab-btn.active{ background:var(--accent); color:#06110F; border-color:var(--accent); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+.timeline{ position:relative; padding-left:2rem; border-left:1px solid var(--line); }
+.tl-item{ position:relative; padding-bottom:2.2rem; }
+.tl-item:last-child{ padding-bottom:0; }
+.tl-item::before{
+  content:''; position:absolute; left:-2.4rem; top:.3rem; width:9px; height:9px; border-radius:50%;
+  background:var(--accent); box-shadow:0 0 0 4px var(--accent-soft);
+}
+.tl-year{ font-family:var(--mono); font-size:.76rem; color:var(--accent-2); margin-bottom:.3rem; }
+.tl-title{ font-size:1.02rem; font-weight:700; margin-bottom:.2rem; }
+.tl-org{ font-size:.86rem; color:var(--accent); font-weight:600; margin-bottom:.6rem; }
+.tl-desc{ font-size:.88rem; color:var(--text-dim); line-height:1.75; margin-bottom:.7rem; }
+.tl-desc strong{ color:var(--text); }
+.tl-meta{ display:flex; flex-wrap:wrap; gap:.4rem; }
+.tl-meta span{ font-size:.72rem; font-family:var(--mono); padding:.2rem .55rem; border:1px solid var(--line); border-radius:100px; color:var(--text-faint); }
+
+.certs-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; }
+@media (max-width:960px){ .certs-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .certs-grid{ grid-template-columns:1fr; } }
+.cert-card{ background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:1.4rem; transition:.25s var(--ease); }
+.cert-card:hover{ border-color:var(--accent-3); transform:translateY(-3px); box-shadow:var(--shadow); }
+.cert-title{ font-size:.92rem; font-weight:700; margin-bottom:.25rem; }
+.cert-org{ font-size:.78rem; color:var(--accent-3); font-weight:600; margin-bottom:.6rem; }
+.cert-desc{ font-size:.8rem; color:var(--text-dim); line-height:1.6; margin-bottom:.8rem; }
+.cert-tags{ display:flex; flex-wrap:wrap; gap:.3rem; margin-bottom:.9rem; }
+.cert-tag{ font-family:var(--mono); font-size:.63rem; padding:.15rem .45rem; border-radius:100px; background:var(--accent-3-soft); color:var(--accent-3); }
+.cert-link{ font-size:.78rem; font-weight:700; color:var(--text-dim); text-decoration:none; }
+.cert-link:hover{ color:var(--accent-3); }
+
+/* ============================================================
+   HOBBIES
+   ============================================================ */
+.hobby-tabs{ display:flex; gap:.4rem; margin-bottom:2.2rem; flex-wrap:wrap; }
+.hobby-gallery{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+@media (max-width:960px){ .hobby-gallery{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:640px){ .hobby-gallery{ grid-template-columns:repeat(2,1fr); } }
+.hobby-card{
+  position:relative; aspect-ratio:4/5; border-radius:var(--radius); overflow:hidden;
+  border:1px solid var(--line); cursor:default; background:var(--panel);
+}
+.hobby-card img{ width:100%; height:100%; object-fit:cover; transition:transform .5s var(--ease); }
+.hobby-card:hover img{ transform:scale(1.06); }
+.hobby-card .ph{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.6rem; text-align:center; padding:1rem;
+  background:
+    linear-gradient(155deg, var(--accent-soft), var(--accent-3-soft)),
+    linear-gradient(155deg, var(--bg-sunk), var(--panel));
+  color:var(--text-dim);
+}
+.hobby-card .ph svg{ width:26px; height:26px; opacity:.85; }
+.hobby-card .ph small{ font-family:var(--mono); font-size:.66rem; opacity:.75; }
+.hobby-card .cap{
+  position:absolute; left:0; right:0; bottom:0; padding:.8rem .9rem .7rem;
+  background:linear-gradient(to top, rgba(0,0,0,.68), transparent);
+  color:#fff; font-size:.76rem; font-weight:600; opacity:0; transform:translateY(6px);
+  transition:.25s;
+}
+.hobby-card:hover .cap{ opacity:1; transform:translateY(0); }
+
+.hobby-note{
+  margin-top:1.6rem; font-size:.82rem; color:var(--text-faint); font-family:var(--mono);
+  border:1px dashed var(--line-strong); border-radius:var(--radius-sm); padding:.9rem 1.1rem; line-height:1.6;
+}
+
+/* ============================================================
+   WRITING (blogs)
+   ============================================================ */
+.blog-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.1rem; }
+@media (max-width:960px){ .blog-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px){ .blog-grid{ grid-template-columns:1fr; } }
+.blog-card{ border-top:2px solid var(--line); padding-top:1.1rem; transition:.2s; }
+.blog-card:hover{ border-top-color:var(--accent-2); }
+.blog-date{ font-family:var(--mono); font-size:.72rem; color:var(--accent-2); margin-bottom:.5rem; }
+.blog-title{ font-size:.98rem; font-weight:700; line-height:1.4; margin-bottom:.55rem; }
+.blog-desc{ font-size:.83rem; color:var(--text-dim); line-height:1.65; margin-bottom:.8rem; }
+.blog-link{ font-size:.8rem; font-weight:700; color:var(--text); text-decoration:none; border-bottom:1px solid var(--line-strong); padding-bottom:2px; }
+.blog-link:hover{ color:var(--accent-2); border-color:var(--accent-2); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+@media (max-width:900px){ .contact-grid{ grid-template-columns:1fr; } }
+.contact-item{ display:flex; gap:1rem; align-items:flex-start; margin-bottom:1.4rem; }
+.contact-icon{ width:38px; height:38px; border-radius:10px; background:var(--accent-soft); color:var(--accent); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.contact-icon svg{ width:18px; height:18px; }
+.contact-label{ font-size:.72rem; color:var(--text-faint); font-family:var(--mono); display:block; margin-bottom:.15rem; }
+.contact-value{ font-size:.98rem; font-weight:700; text-decoration:none; color:var(--text); }
+.contact-value:hover{ color:var(--accent); }
+.contact-note p{ color:var(--text-dim); font-size:.95rem; line-height:1.8; margin-bottom:1.1rem; }
+.contact-quote{
+  font-family:var(--serif); font-size:1.15rem; font-style:italic; color:var(--text);
+  border-left:2px solid var(--accent); padding-left:1.1rem; line-height:1.6;
+}
+
+footer{ border-top:1px solid var(--line); padding:2rem 0; text-align:center; }
+.footer-text{ font-size:.82rem; color:var(--text-faint); }
+.footer-text b{ color:var(--accent); }
+
+.scroll-top{
+  position:fixed; right:1.5rem; bottom:1.5rem; width:44px; height:44px; border-radius:50%;
+  background:var(--panel); border:1px solid var(--line-strong); color:var(--text);
+  display:flex; align-items:center; justify-content:center; text-decoration:none; z-index:150;
+  opacity:0; pointer-events:none; transition:.3s; box-shadow:var(--shadow);
+}
+.scroll-top.show{ opacity:1; pointer-events:auto; }
+
+/* reveal on scroll */
+.reveal{ opacity:0; transform:translateY(18px); transition:opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.in{ opacity:1; transform:translateY(0); }
+
+/* ============================================================
+   MODALS (About / Projects / Certifications / Hobbies / Writing)
+   ============================================================ */
+.modal-overlay{
+  position:fixed; inset:0; z-index:400; background:var(--overlay); backdrop-filter:blur(6px);
+  display:flex; align-items:flex-start; justify-content:center; padding:5vh 1.25rem;
+  opacity:0; pointer-events:none; transition:opacity .3s var(--ease);
+}
+.modal-overlay.open{ opacity:1; pointer-events:auto; }
+.modal-box{
+  background:var(--panel); border:1px solid var(--line); border-radius:20px; width:100%; max-width:920px;
+  max-height:88vh; overflow:hidden; display:flex; flex-direction:column; box-shadow:var(--shadow);
+  transform:translateY(24px) scale(.98); transition:transform .32s var(--ease);
+}
+.modal-overlay.open .modal-box{ transform:translateY(0) scale(1); }
+.modal-header{
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  padding:1.5rem 1.7rem; border-bottom:1px solid var(--line); flex-shrink:0;
+}
+.modal-header h3{ font-family:var(--serif); font-size:1.35rem; font-weight:600; }
+.modal-close{
+  width:38px; height:38px; border-radius:50%; border:1px solid var(--line-strong); background:transparent;
+  color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:.2s;
+}
+.modal-close:hover{ border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+.modal-close svg{ width:16px; height:16px; }
+.modal-body{ padding:1.8rem 1.7rem 2.2rem; overflow-y:auto; }
+@media (max-width:640px){ .modal-body{ padding:1.3rem 1.2rem 1.8rem; } .modal-header{ padding:1.2rem 1.3rem; } }
+
+.modal-section{ margin-bottom:2.2rem; }
+.modal-section:last-child{ margin-bottom:0; }
+.modal-section-title{
+  display:flex; align-items:center; gap:.6rem; font-size:1.02rem; font-weight:700; color:var(--accent);
+  margin-bottom:1rem; padding-bottom:.7rem; border-bottom:1px solid var(--line);
+}
+.modal-section-title svg{ width:19px; height:19px; flex-shrink:0; }
+.modal-section p{ color:var(--text-dim); font-size:.92rem; line-height:1.8; margin-bottom:.9rem; }
+.modal-section p:last-child{ margin-bottom:0; }
+
+.detail-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; }
+@media (max-width:720px){ .detail-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:480px){ .detail-grid{ grid-template-columns:1fr; } }
+.detail-item h5{ font-size:.86rem; font-weight:700; margin-bottom:.55rem; }
+.detail-item ul{ list-style:none; display:flex; flex-direction:column; gap:.35rem; }
+.detail-item li{ font-size:.82rem; color:var(--text-dim); padding-left:.9rem; position:relative; }
+.detail-item li::before{ content:''; position:absolute; left:0; top:.55em; width:4px; height:4px; border-radius:50%; background:var(--accent); }
+
+.interest-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; }
+@media (max-width:720px){ .interest-grid{ grid-template-columns:repeat(2,1fr); } }
+.interest-item{ background:var(--bg); border:1px solid var(--line); border-radius:var(--radius-sm); padding:1.1rem; }
+.interest-item .skill-icon{ width:26px; height:26px; margin-bottom:.7rem; }
+.interest-item h5{ font-size:.85rem; font-weight:700; margin-bottom:.35rem; }
+.interest-item p{ font-size:.78rem; color:var(--text-dim); line-height:1.55; margin:0; }
+
+.philosophy-list{ list-style:none; display:flex; flex-direction:column; gap:.7rem; }
+.philosophy-list li{ font-size:.88rem; color:var(--text-dim); line-height:1.7; padding-left:1.3rem; position:relative; }
+.philosophy-list li::before{ content:''; position:absolute; left:0; top:.6em; width:6px; height:6px; border-radius:50%; background:var(--accent-2); }
+.philosophy-list strong{ color:var(--text); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ NAV ============================================================ -->
+<nav id="mainNav">
+  <div class="nav-row">
+    <a href="#home" class="nav-mark" aria-label="Tanjin Adnan Abir — home">
+      <span class="nav-logo">T</span>
+      <span class="nav-word">Tanjin&nbsp;Adnan&nbsp;Abir</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#certifications">Certifications</a></li>
+      <li><a href="#hobbies">Hobbies</a></li>
+      <li><a href="#writing">Writing</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">
+        <span class="track-icon sun">☀</span><span class="track-icon moon">☾</span>
+        <span class="knob" id="themeKnob"></span>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-overlay" id="navOverlay"></div>
+
+<!-- ============================================================ HERO ============================================================ -->
+<section id="home">
+  <canvas id="heroBgCanvas"></canvas>
+  <canvas id="fieldCanvas"></canvas>
+  <div class="wrap hero-center">
+    <div class="hero-kicker"><span id="roleType">Computer Scientist</span><span class="cursor"></span></div>
+    <h1 class="hero-name">Tanjin Adnan Abir</h1>
+    <p class="hero-desc">
+      I build at the intersection of <strong>machine learning</strong>, <strong>computational neuroscience</strong>, <strong>quantum computing</strong> and <strong>applied physics</strong> — designing systems that learn, modelling how the brain computes, and exploring what quantum hardware makes possible.
+    </p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-solid">View my work</a>
+      <a href="#hobbies" class="btn btn-line">Beyond the lab</a>
+      <a href="#contact" class="btn btn-ghost btn-pulse">
+        <span class="pulse-dot"><span class="pulse-ring"></span></span>
+        Get in touch
+        <svg class="pulse-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+    <div class="hero-socials">
+      <a href="https://github.com/tanjinadnanabir" class="social-icon" title="GitHub" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+      <a href="https://www.linkedin.com/in/tanjinadnanabir/" class="social-icon" title="LinkedIn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+      <a href="https://www.facebook.com/tanjinadnanabir/" class="social-icon" title="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+      <a href="https://x.com/tanjinadnanabir" class="social-icon" title="X / Twitter" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a href="https://www.instagram.com/tanjinadnanabir/" class="social-icon" title="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+      <a href="https://www.youtube.com/@tanjinadnanabir" class="social-icon" title="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></a>
+      <a href="https://www.medium.com/@tanjinadnanabir" class="social-icon" title="Medium" target="_blank" rel="noopener"><svg viewBox="0 0 48 48"><path d="M2,40.2l5.3-6.1v-21L2.6,7.8V7H15.1l10,21.2L33.9,7H46v.8l-4,3.7V36.6l4,3.6V41H28.6v-.8l4.1-4.8V16.6L22.7,41H21.4L9.8,17.1V33.9l5.3,6.3V41H2Z"/></svg></a>
+      <a href="https://huggingface.co/tanjinadnanabir" class="social-icon" title="Hugging Face" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3.5c1.24 0 2.25 1.01 2.25 2.25S13.24 10 12 10s-2.25-1.01-2.25-2.25S10.76 5.5 12 5.5zM7.5 9c.83 0 1.5.67 1.5 1.5S8.33 12 7.5 12 6 11.33 6 10.5 6.67 9 7.5 9zm9 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm-4.5 9c-3.31 0-6-1.79-6-4h12c0 2.21-2.69 4-6 4zm-2.5-5.5c0 .55.45 1 1 1h5c.55 0 1-.45 1-1s-.45-1-1-1h-5c-.55 0-1 .45-1 1z" fill="currentColor"/></svg></a>
+      <a href="https://www.behance.net/tanjinadnanabir" class="social-icon behance-icon" title="Behance" target="_blank" rel="noopener">Be</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>5+</b><span>Years experience</span></div>
+      <div class="stat"><b>15+</b><span>Certifications</span></div>
+      <div class="stat"><b>10+</b><span>Projects</span></div>
+      <div class="stat"><b>2</b><span>Degrees</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ ABOUT ============================================================ -->
+<section id="about" class="alt-bg">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-about" data-section="about"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="about-intro reveal">
+      <div class="about-text">
+        <div class="section-tag">Profile</div>
+        <h2 class="section-title" id="aboutHeading">A researcher's curiosity, an engineer's follow-through</h2>
+        <p class="section-sub" style="margin-bottom:1.6rem;">Background spanning applied ML research, IT infrastructure and STEM education — with a growing focus on quantum machine learning and computational neuroscience.</p>
+        <p>With experience teaching STEM subjects and building software professionally, I bring a diverse, adaptable skill set to every project. My drive to keep <span class="mark">learning, researching and building</span> is what pulls me toward new fields rather than away from them.</p>
+        <p>I'm motivated by generating original ideas and turning them into practical solutions for complex, real-world problems. My core interests sit across <strong>deep learning</strong>, <strong>computer vision</strong>, <strong>NLP</strong>, <strong>data science</strong>, <strong>quantum computing</strong> and <strong>computational neuroscience</strong> — and I'm actively working toward building a startup in one of these frontier-tech spaces.</p>
+        <p>Proficient in Python, C, C++, JavaScript and SQL. Fluent in English and Bangla, which has made cross-border research collaboration second nature.</p>
+        <div class="more-btn-row">
+          <button class="btn-more" id="moreAboutBtn">More about me
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="about-side" id="aboutSide">
+        <div class="avatar-card" id="avatarCard">
+          <div class="avatar-photo">
+            <img src="images/profile.png" alt="Tanjin Adnan Abir" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="fallback" style="display:none;">TAA</div>
+          </div>
+          <!-- <div class="avatar-name">Tanjin Adnan Abir</div> -->
+          <div class="avatar-role">Computer Scientist | Researcher | Engineer | Educator </div>
+          <div class="avatar-badges">
+            <span class="avatar-badge c1">AI</span>
+            <span class="avatar-badge c2">Quantum</span>
+            <span class="avatar-badge c3">NLP</span>
+            <span class="avatar-badge c1">Computer Vision</span>
+            <span class="avatar-badge c2">Neuroscience</span>
+          </div>
+          <!-- <div class="avatar-loc">📍 Dhaka, Bangladesh</div> -->
+        </div>
+        <div class="fact-list">
+          <div class="fact-row"><span>Current role</span><span>STEM Educator &amp; AI Researcher</span></div>
+          <div class="fact-row"><span>Education</span><span>Computer Science &amp; Applied Physics</span></div>
+          <div class="fact-row"><span>Research focus</span><span>AI · DL · NLP · CV · QML</span></div>
+          <div class="fact-row"><span>Languages</span><span>English, Bangla</span></div>
+          <div class="fact-row"><span>Aiming toward</span><span>Deep-tech lab</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reveal">
+      <div class="section-tag" style="margin-bottom:1.4rem;">Core expertise</div>
+      <div class="skills-grid" id="skillsGrid"></div>
+    </div>
+
+    <div class="reveal">
+      <div class="section-tag" style="margin-bottom:1.2rem;">Tools &amp; stack</div>
+      <div class="stack-wrap" id="stackWrap"></div>
+    </div>
+  </div>
+</section>
+
+<!-- About Modal -->
+<div class="modal-overlay" id="aboutModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>More about me</h3>
+      <button class="modal-close" id="closeAboutModal" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-title">${ICON:book} My journey</div>
+        <p>With experience teaching STEM subjects and a foundation in IT support and software development, I bring a diverse and adaptable skill set to every endeavor. My passion for learning, research, and innovation fuels my drive to explore new opportunities and expand the boundaries of knowledge.</p>
+        <p>I am highly motivated and enthusiastic about research and development, with a keen interest in generating original ideas and devising practical solutions to complex, real-world challenges. My primary fields of interest include deep learning, NLP, computer vision, data science, quantum computing, and computational biology.</p>
+        <p>I have hands-on expertise in machine learning and deep learning algorithms, as well as in web development. Proficient in multiple programming languages — Python, C, C++, JavaScript, and SQL — I combine technical skills with a research-driven mindset. In addition, I am fluent in English and Bangla.</p>
+        <p>Throughout my academic and professional journey, I have consistently demonstrated a commitment to excellence and continuous learning. I believe in the transformative power of technology and its potential to solve some of humanity's most pressing challenges.</p>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">${ICON:chip} Technical expertise</div>
+        <div class="detail-grid">
+          <div class="detail-item"><h5>Programming Languages</h5><ul><li>Python</li><li>C/C++</li><li>JavaScript</li><li>SQL</li><li>HTML5 &amp; CSS3</li></ul></div>
+          <div class="detail-item"><h5>Machine Learning Tools</h5><ul><li>TensorFlow &amp; Keras</li><li>PyTorch</li><li>Scikit-learn</li><li>HuggingFace Transformers</li><li>OpenCV</li></ul></div>
+          <div class="detail-item"><h5>Deep Learning</h5><ul><li>NLP &amp; LLM models</li><li>RNN, LSTM, GRU</li><li>CNN architectures</li><li>Transformer models</li><li>Transfer learning &amp; fine-tuning</li></ul></div>
+          <div class="detail-item"><h5>Data Science</h5><ul><li>NumPy &amp; Pandas</li><li>Matplotlib &amp; Seaborn</li><li>Plotly</li><li>MS Excel &amp; Sheets</li><li>Jupyter Notebook</li></ul></div>
+          <div class="detail-item"><h5>Quantum Computing</h5><ul><li>Qiskit framework</li><li>Quantum algorithms</li><li>Quantum machine learning</li><li>Quantum cryptography</li><li>Quantum information theory</li></ul></div>
+          <div class="detail-item"><h5>Development &amp; Tools</h5><ul><li>Git, GitHub &amp; GitLab</li><li>VS Code &amp; Cursor</li><li>Colab &amp; Kaggle</li><li>SQL &amp; NoSQL</li><li>Linux, Docker, CI/CD</li></ul></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">${ICON:atom} Interests</div>
+        <div class="interest-grid">
+          <div class="interest-item"><div class="skill-icon">${ICON:brain}</div><h5>Deep Learning</h5><p>Architectures, optimization, novel learning paradigms.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:code}</div><h5>Computer Vision</h5><p>Image recognition, object detection, segmentation.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:sigma}</div><h5>NLP</h5><p>Language models, sentiment analysis, translation.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:chip}</div><h5>Data Science</h5><p>Statistical analysis, predictive modeling, visualization.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:atom}</div><h5>Quantum Computing</h5><p>Quantum algorithms and quantum machine learning.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:dna}</div><h5>Computational Biology</h5><p>Bioinformatics, genomics, computational neuroscience.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:palette}</div><h5>Web Design</h5><p>Designing and building web applications.</p></div>
+          <div class="interest-item"><div class="skill-icon">${ICON:gamepad}</div><h5>Gaming, Writing, Travel</h5><p>Brain-teaser games, creative writing, exploring new places.</p></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">${ICON:award} Additional skills &amp; languages</div>
+        <div class="detail-grid">
+          <div class="detail-item"><h5>Soft Skills</h5><ul><li>Problem solving</li><li>Critical thinking</li><li>Research &amp; analysis</li><li>Project management</li><li>Team collaboration</li></ul></div>
+          <div class="detail-item"><h5>Competitive Programming</h5><ul><li>HackerRank</li><li>CodeChef</li><li>HackerEarth</li><li>Codeforces</li><li>Rosalind</li></ul></div>
+          <div class="detail-item"><h5>Teaching &amp; Mentoring</h5><ul><li>Teaching experience</li><li>STEM subject expertise</li><li>Curriculum development</li><li>Student assessment</li></ul></div>
+          <div class="detail-item"><h5>Languages</h5><ul><li>English (fluent)</li><li>Bangla (native)</li></ul></div>
+        </div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-title">${ICON:compass} Philosophy &amp; approach</div>
+        <p>I believe that the intersection of different fields creates the most innovative solutions. My background spanning physics, computer science, and education has taught me to approach problems holistically, considering both theoretical foundations and practical applications.</p>
+        <p>I am passionate about making complex concepts accessible and enjoy sharing knowledge through teaching, writing, and collaborative projects.</p>
+        <ul class="philosophy-list">
+          <li><strong>Continuous learning:</strong> staying current with the latest research and technologies</li>
+          <li><strong>Ethical AI:</strong> developing responsible and unbiased AI systems</li>
+          <li><strong>Practical impact:</strong> creating solutions that address real-world problems</li>
+          <li><strong>Collaboration:</strong> working with diverse teams toward common goals</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ PROJECTS ============================================================ -->
+<section id="projects">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-projects" data-section="projects"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Selected work</div>
+        <h2 class="section-title">Featured projects &amp; research</h2>
+        <p class="section-sub">Work spanning NLP, computer vision, deep learning, computational neuroscience and quantum computing.</p>
+      </div>
+    </div>
+    <div class="card-grid reveal" id="projectsGrid"></div>
+    <div class="show-more-wrap"><button class="btn-more" id="projectsMoreBtn">More projects
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button></div>
+  </div>
+</section>
+
+<!-- Projects Modal -->
+<div class="modal-overlay" id="projectsModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>More projects</h3>
+      <button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="modal-body"><div class="card-grid" id="projectsModalGrid"></div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ EXPERIENCE ============================================================ -->
+<section id="experience" class="alt-bg">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-experience" data-section="experience"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Career</div>
+        <h2 class="section-title">Experience</h2>
+        <p class="section-sub">Roles spanning industry, academia and STEM education.</p>
+      </div>
+    </div>
+    <div class="timeline reveal" id="experienceTimeline"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ EDUCATION (Education / Training tabs) ============================================================ -->
+<section id="education">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-education" data-section="education"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Academic record</div>
+        <h2 class="section-title">Education &amp; training</h2>
+        <p class="section-sub">Formal degrees and hands-on bootcamps beyond the classroom.</p>
+      </div>
+    </div>
+
+    <div class="tabs reveal">
+      <button class="tab-btn active" data-tab="education">Education</button>
+      <button class="tab-btn" data-tab="training">Training</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-education"><div class="timeline" id="educationTimeline"></div></div>
+    <div class="tab-panel" id="tab-training"><div class="timeline" id="trainingTimeline"></div></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ CERTIFICATIONS ============================================================ -->
+<section id="certifications" class="alt-bg">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-certifications" data-section="certifications"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Credentials</div>
+        <h2 class="section-title">Online programs, courses &amp; certifications</h2>
+        <p class="section-sub">A commitment to continuous learning across AI, quantum computing and data science.</p>
+      </div>
+    </div>
+    <div class="certs-grid reveal" id="certsGrid"></div>
+    <div class="show-more-wrap"><button class="btn-more" id="certsMoreBtn">More certifications
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button></div>
+  </div>
+</section>
+
+<!-- Certifications Modal -->
+<div class="modal-overlay" id="certsModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>More certifications &amp; courses</h3>
+      <button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="modal-body"><div class="certs-grid" id="certsModalGrid"></div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ HOBBIES ============================================================ -->
+<section id="hobbies" class="alt-bg">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-hobbies" data-section="hobbies"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Off the clock</div>
+        <h2 class="section-title">Travel, games, and a camera I never quite put down</h2>
+        <p class="section-sub">A working scientist still needs a life outside the lab — here's the rest of mine: places visited, games played, and things designed for fun rather than for a paper.</p>
+      </div>
+    </div>
+
+    <div class="hobby-tabs reveal">
+      <button class="tab-btn active" data-hobby="all">All</button>
+      <button class="tab-btn" data-hobby="travel">Travel</button>
+      <button class="tab-btn" data-hobby="gaming">Gaming</button>
+      <button class="tab-btn" data-hobby="photography">Photography</button>
+      <button class="tab-btn" data-hobby="events">Events</button>
+      <button class="tab-btn" data-hobby="design">Creative design</button>
+      <button class="tab-btn" data-hobby="other">Others</button>
+    </div>
+
+    <div class="hobby-gallery reveal" id="hobbyGallery"></div>
+    <div class="show-more-wrap"><button class="btn-more" id="hobbiesMoreBtn">More from the gallery
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button></div>
+
+    <!-- <div class="hobby-note">
+      // this grid is wired to /images/hobbies/*.jpg — drop your own travel, gaming, photography and design photos into that folder using the filenames in the HTML source, and they'll replace these placeholders automatically.
+    </div> -->
+  </div>
+</section>
+
+<!-- Hobbies Modal -->
+<div class="modal-overlay" id="hobbiesModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>More from the gallery</h3>
+      <button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="modal-body"><div class="hobby-gallery" id="hobbiesModalGrid"></div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ WRITING (blogs) ============================================================ -->
+<section id="writing">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-writing" data-section="writing"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Writing &amp; research</div>
+        <h2 class="section-title">Essays at the edge of AI, physics and education</h2>
+        <p class="section-sub">Long-form pieces exploring ideas across artificial intelligence, quantum theory and the future of learning.</p>
+      </div>
+    </div>
+    <div class="blog-grid reveal" id="blogGrid"></div>
+    <div class="show-more-wrap"><button class="btn-more" id="blogMoreBtn">More writing
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button></div>
+  </div>
+</section>
+
+<!-- Writing Modal -->
+<div class="modal-overlay" id="blogModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>More writing &amp; research</h3>
+      <button class="modal-close" data-close aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <div class="modal-body"><div class="blog-grid" id="blogModalGrid"></div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============================================================ CONTACT ============================================================ -->
+<section id="contact" class="alt-bg">
+<div class="section-bg" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><canvas class="section-particle-canvas" id="bgCanvas-contact" data-section="contact"></canvas></div>
+
+  <div class="wrap section-pad">
+    <div class="section-head reveal">
+      <div class="section-head-text">
+        <div class="section-tag">Connect</div>
+        <h2 class="section-title">Let's build something worth researching</h2>
+        <p class="section-sub">Open to research collaborations, roles, and early conversations about frontier-tech startups.</p>
+      </div>
+    </div>
+
+    <div class="contact-grid reveal">
+      <div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18v12H3z"/><path d="M3 7l9 6 9-6"/></svg></div>
+          <div><span class="contact-label">Email</span><a href="mailto:tanjinadnanabir@gmail.com" class="contact-value">tanjinadnanabir@gmail.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.5 7-12a7 7 0 10-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg></div>
+          <div><span class="contact-label">Location</span><span class="contact-value">Dhaka, Bangladesh</span></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div><span class="contact-label">Phone</span><a href="tel:+8801729335233" class="contact-value">+880 1729 335233</a></div>
+        </div>
+        <!-- <div class="contact-item">
+          <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></div>
+          <div><span class="contact-label">Portfolio</span><a href="https://sites.google.com/view/tanjinadnanabir/" target="_blank" rel="noopener" class="contact-value">sites.google.com/view/tanjinadnanabir</a></div>
+        </div> -->
+        <div class="hero-socials" style="margin-top:1.6rem;">
+          <a href="https://github.com/tanjinadnanabir" class="social-icon" title="GitHub" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+          <a href="https://www.linkedin.com/in/tanjinadnanabir/" class="social-icon" title="LinkedIn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+          <a href="https://x.com/tanjinadnanabir" class="social-icon" title="X / Twitter" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="https://www.facebook.com/tanjinadnanabir/" class="social-icon" title="Facebook" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg></a>
+          <a href="https://www.instagram.com/tanjinadnanabir/" class="social-icon" title="Instagram" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg></a>
+          <a href="https://www.youtube.com/@tanjinadnanabir" class="social-icon" title="YouTube" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></a>
+          <a href="https://www.medium.com/@tanjinadnanabir" class="social-icon" title="Medium" target="_blank" rel="noopener"><svg viewBox="0 0 48 48"><path d="M2,40.2l5.3-6.1v-21L2.6,7.8V7H15.1l10,21.2L33.9,7H46v.8l-4,3.7V36.6l4,3.6V41H28.6v-.8l4.1-4.8V16.6L22.7,41H21.4L9.8,17.1V33.9l5.3,6.3V41H2Z"/></svg></a>
+          <a href="https://huggingface.co/tanjinadnanabir" class="social-icon" title="Hugging Face" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3.5c1.24 0 2.25 1.01 2.25 2.25S13.24 10 12 10s-2.25-1.01-2.25-2.25S10.76 5.5 12 5.5zM7.5 9c.83 0 1.5.67 1.5 1.5S8.33 12 7.5 12 6 11.33 6 10.5 6.67 9 7.5 9zm9 0c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5-1.5-.67-1.5-1.5.67-1.5 1.5-1.5zm-4.5 9c-3.31 0-6-1.79-6-4h12c0 2.21-2.69 4-6 4zm-2.5-5.5c0 .55.45 1 1 1h5c.55 0 1-.45 1-1s-.45-1-1-1h-5c-.55 0-1 .45-1 1z" fill="currentColor"/></svg></a>
+          <a href="https://www.behance.net/tanjinadnanabir" class="social-icon behance-icon" title="Behance" target="_blank" rel="noopener">Be</a>
+        </div>
+      </div>
+
+      <div class="contact-note">
+        <p>I'm always glad to connect with fellow researchers, engineers and educators — whether that's <strong>AI/ML research collaboration</strong>, an idea in <strong>quantum computing</strong>, or an early conversation about a <strong>deep-tech lab</strong>. My inbox is open.</p>
+        <p>I believe the most interesting solutions live at the intersection of fields. An interdisciplinary background in physics, computer science and education lets me approach problems from more than one angle.</p>
+        <p class="contact-quote">Continuous learning, ethical AI, and practical impact — the principles behind everything I build.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-text">&copy; 2026 <b>Tanjin Adnan Abir</b> — All rights reserved</div>
+</footer>
+
+<a href="#home" class="scroll-top" id="scrollTop" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</a>
+
+<script>
+/* ============================================================
+   ICONS — small inline SVG library (stroke based, currentColor)
+   ============================================================ */
+const ICONS = {
+  brain: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 4a3 3 0 00-3 3 3 3 0 00-1.5 5.6A3.5 3.5 0 007 18a3 3 0 003 3M9 4a3 3 0 013 3v10a3 3 0 01-3 3M9 4c0-1.1.9-2 2-2M15 4a3 3 0 013 3 3 3 0 011.5 5.6A3.5 3.5 0 0117 18a3 3 0 01-3 3M15 4a3 3 0 00-3 3v10a3 3 0 003 3M15 4c0-1.1-.9-2-2-2"/></svg>',
+  atom: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="9" ry="3.6"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.6" transform="rotate(120 12 12)"/></svg>',
+  sigma: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M19 5H6l6 7-6 7h13"/></svg>',
+  chip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>',
+  wave: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 12c2 0 2-6 4-6s2 12 4 12 2-12 4-12 2 6 4 6 2-6 4-6"/></svg>',
+  camera: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h3l2-2.5h6L17 8h3a1 1 0 011 1v9a1 1 0 01-1 1H4a1 1 0 01-1-1V9a1 1 0 011-1z"/><circle cx="12" cy="13.5" r="3.4"/></svg>',
+  gamepad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="8" width="20" height="10" rx="5"/><path d="M7 11v4M5 13h4M16 12h.01M18.5 14.5h.01"/></svg>',
+  palette: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3a9 9 0 000 18c1.4 0 2-1 2-2 0-.6-.3-1-.6-1.4-.3-.4-.5-.8-.5-1.3 0-1 .8-1.8 1.8-1.8H16a5 5 0 005-5c0-3.6-4-6.5-9-6.5z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="10.5" cy="7.5" r="1"/><circle cx="15" cy="8" r="1"/></svg>',
+  plane: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2.5 12.5l18-8-7 18-2.5-7-8.5-3z"/></svg>',
+  compass: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9.2"/><path d="M15 9l-2 5.5L8 16l2-5.5L15 9z"/></svg>',
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4.5A2.5 2.5 0 016.5 2H20v17.5H6.5A2.5 2.5 0 004 22V4.5z"/><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/></svg>',
+  cap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11.5V17c0 1.5 3 3 6 3s6-1.5 6-3v-5.5"/></svg>',
+  flag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3v18M5 4h13l-3 4 3 4H5"/></svg>',
+  award: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="5.2"/><path d="M8.5 12.5L7 21l5-2.5L17 21l-1.5-8.5"/></svg>',
+  dna: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3c0 6 12 12 12 18M18 3c0 6-12 12-12 18M4 8h16M4 16h16"/></svg>',
+  code: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 5L2 12l6 7M16 5l6 7-6 7M13.5 3l-3 18"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20l1-4.5L15.5 5 19 8.5 8.5 19 4 20z"/></svg>',
+};
+function icon(name){ return ICONS[name] || ''; }
+
+/* Fill ${ICON:x} placeholders that were written directly into static modal HTML */
+document.querySelectorAll('.modal-section-title').forEach(node=>{
+  node.innerHTML = node.innerHTML.replace(/\$\{ICON:([a-z]+)\}/g, (_, name) => icon(name));
+});
+document.querySelectorAll('.interest-item .skill-icon').forEach(node=>{
+  node.innerHTML = node.innerHTML.replace(/\$\{ICON:([a-z]+)\}/g, (_, name) => icon(name));
+});
+
+/* ============================================================
+   DATA
+   ============================================================ */
+const skillCards = [
+  { icon:'brain', title:'Machine Learning', desc:'Deep learning, NLP, LLMs, Computer Vision and Model Optimization Across the Full ML Pipeline.', tags:['TensorFlow','PyTorch','Keras','Scikit-learn','HuggingFace'] },
+  { icon:'sigma', title:'Data Science', desc:'End-to-end Data Workflows: Preprocessing, EDA, Visualization, Analytics and Feature Engineering.', tags:['Pandas','NumPy','Matplotlib','Plotly','SQL'] },
+  { icon:'atom', title:'Quantum Computing', desc:'Quantum Algorithms, QML, Quantum Cryptography and Information Theory.', tags:['Qiskit','QML','QKD','Quantum Information'] },
+  { icon:'chip', title:'Engineering & Systems', desc:'Full-Stack Programming, Web Systems, Databases and IT Infrastructure in Production Settings.', tags:['Python','JavaScript','C/C++','SQL','Linux'] },
+];
+
+const stack = [
+  ['Python','#3572A5'],['PyTorch','#EE4C2C'],['TensorFlow','#FF6F00'],['Scikit-learn','#F7931E'],
+  ['Keras','#D00000'],['Transformers','#FFBF00'],['HuggingFace','#FFD21E'],['Qiskit','#6929C4'],
+  ['JavaScript','#F0DB4F'],['C / C++','#5C6BC0'],['SQL','#336791'],['MySQL','#4479A1'],
+  ['MongoDB','#47A248'],['Git','#F05032'],['GitHub','#6E7681'],['GitLab','#FC6D26'],
+  ['Docker','#2496ED'],['Linux','#4FD1C0'],['Jupyter','#F37626'],['LaTeX','#B79CFF'],
+];
+
+/* every project always carries exactly 2 links; '#' is used as a placeholder where no public link exists yet */
+const projects = [
+  { icon:'brain', title:'NeuroFusion-HCNN', desc:"A multi-architectural hybrid convolutional neural network for multi-class Alzheimer's disease classification from MRI images.", tags:['DL','Computer vision','CNN'], links:[['GitHub','#'],['HF Models','https://huggingface.co/tanjinadnanabir/models']] },
+  { icon:'code', title:'BanglaLiteFormer: Efficient Sentiment Classification of Bangla E-Commerce Reviews', desc:'A lightweight transformer architecture for sentiment analysis on Bangla e-commerce product reviews. Published in IEEE Transactions on Artificial Intelligence, 2026.', tags:['DL','Transformer','NLP','RNN'], links:[['GitHub','https://shukdevtroy.github.io/BanglaLiteFormer/'],['Live demo','https://tanjinadnanabir.github.io/BanglaLiteFormer/']] },
+  { icon:'brain', title:'Mapping Information Flow & Choice Representations in the Mouse Brain', desc:"Investigating how sensory information is processed across the brain using the International Brain Laboratory's Brain-Wide Map dataset.", tags:['Neuroscience','Data analysis','IBL'], links:[['GitHub','https://github.com/tanjinadnanabir/NMA-CN-IBL-Spiking-Cats'],['Live demo','https://github.com/tanjinadnanabir/NMA-CN-IBL-Spiking-Cats']] },
+  { icon:'code', title:'AI Chatbots & Agents', desc:'Several intelligent chatbots and agents built with advanced NLP and LLM techniques for real-world conversational AI.', tags:['Agents','Chatbot','LLM','NLP'], links:[['GitHub','https://github.com/tanjinadnanabir/GenAI-LLM-AI-Agents-Chatbots'],['HF Spaces','https://huggingface.co/tanjinadnanabir/spaces']] },
+  { icon:'atom', title:'Quantum Machine Learning Tutorial', desc:"Schrödinger's Cats — an open learning platform for quantum machine learning.", tags:['QML','Qiskit','Education'], links:[['GitHub','#'],['Live demo','https://tanjinadnanabir.github.io/WISER-Education-Challenge']] },
+  { icon:'code', title:'Fine-tuned LLM Models', desc:'Fine-tuned several LLM models on Hugging Face for domain-specific classification, generation and reasoning tasks.', tags:['LLM','Fine-tuning','GenAI'], links:[['GitHub','#'],['HF Models','https://huggingface.co/tanjinadnanabir/models']] },
+];
+const projectsExtra = [
+  { icon:'chip', title:'Deep Learning for Sentiment Analysis', desc:'Investigates deep learning approaches (RNN, LSTM, GRU, TextCNN, BERT, RoBERTa) for sentiment analysis on the Stanford Sentiment Treebank.', tags:['PyTorch','Transformers','NLP'], links:[['GitHub','https://github.com/tanjinadnanabir/Neuromatch-Academy-Deep-Learning'],['Live demo','#']] },
+  { icon:'dna', title:'Prediction of SARS-CoV-2 from Biological Organ Conditions', desc:'Prediction model for existing conditions in biological organs (heart, lung, kidney, pancreas) using machine learning.', tags:['TensorFlow','Scikit-learn','Keras'], links:[['GitHub','#'],['Live demo','#']] },
+  { icon:'sigma', title:'Forecasting COVID-19 Vaccine Side Effects', desc:'Estimating side effects after Oxford AstraZeneca vaccination among health workers in Nigeria, based on clinical parameters.', tags:['TensorFlow','Scikit-learn','Keras'], links:[['GitHub','#'],['Live demo','#']] },
+  { icon:'dna', title:'Chicken Disease Classification', desc:'End-to-end deep learning project for chicken disease classification using a CNN architecture.', tags:['Computer vision','CNN'], links:[['GitHub','https://github.com/tanjinadnanabir/End-to-End-Deep-Learning-Project-1'],['Live demo','#']] },
+  { icon:'sigma', title:'US Visa Prediction', desc:'End-to-end machine learning project predicting US visa approval outcomes.', tags:['Machine learning','Prediction'], links:[['GitHub','https://github.com/tanjinadnanabir/End-to-End-Machine-Learning-Project-1'],['Live demo','#']] },
+];
+
+const experienceTL = [
+  // { year:'Present', title:'AI Researcher', org:'Independent Researcher and Engineer', desc:"Teaching students across mathematics, physics, chemistry, biology, programming, computer science and engineering — emphasizing <strong>fundamentals, problem-solving and critical thinking</strong>, with lesson plans personalized to each student's goals.", meta:['5+ years','Multiple STEM subjects','Personalized curriculum'] },
+  { year:'Present', title:'STEM Teaching & Training', org:'Independent Educator', desc:"Teaching students across mathematics, physics, chemistry, biology, programming, computer science and engineering — emphasizing <strong>fundamentals, problem-solving and critical thinking</strong>, with lesson plans personalized to each student's goals.", meta:['5+ years','Multiple STEM subjects','Personalized curriculum'] },
+  { year:'2022 – 2025', title:'Executive', org:'DEFT Engineering', desc:'Troubleshooting and technical support for employees and clients; developing and maintaining websites and web applications; email and cloud management; IT budget reporting; document systems; statistical reports and presentations.', meta:['IT support','Web development','Cloud management'] },
+  { year:'', title:'Teaching Assistant', org:'American International University — Bangladesh', desc:'Artificial Intelligence and Expert Systems Lab, Department of Computer Science.', meta:['AIUB','AI & Expert Systems Lab'] },
+];
+
+const educationTL = [
+  { year:'', title:'Master of Science in Applied Physics & Electronics', org:'Jahangirnagar University, Savar, Dhaka, Bangladesh', desc:'<strong>Key courses:</strong> Quantum Physics, Mechanics & Electromagnetics, Atomic and Nuclear Physics, Condensed Matter Physics, Optics and Electronics, Digital Electronics, Nano-Physics and Nano-Technology, Renewable Energy and Sustainable Development, Nuclear and Reactor Engineering.<br><br><strong>Thesis:</strong> Design of a High-Resolution Optoelectronic Visual Prosthesis for Blind People', meta:["Master's degree","Jahangirnagar University"] },
+  { year:'', title:'Bachelor of Science in Computer Science & Engineering', org:'American International University — Bangladesh', desc:'<strong>Key courses:</strong> Artificial Intelligence, Computer Vision and Pattern Recognition, Data Structures, Algorithms, Computer Organization and Architecture, Human-Computer Interaction, Programming (C, C++, Java, C#), Web Technology, Digital Electronics, Microprocessor, Statistics and Probability, Calculus.<br><br><strong>Thesis:</strong> Improved Detection of Cancer Cell and Tumor Using Region-Based Convolutional Neural Network from MRI Images', meta:["Bachelor's degree",'AIUB']},
+];
+
+const trainingTL = [
+  { year:'2022', title:'Entrepreneurship Capacity Development Training for Fresh Engineers', org:'Engineering Staff College & The Institution of Engineers, Bangladesh (IEB)', desc:'', meta:['IEB'] },
+  { year:'2022', title:'GoLang Coding Bootcamp', org:'Bangladesh Copyright Office', desc:'', meta:['GoLang','Bangladesh Copyright Office'] },
+  { year:'2020', title:'Mobile Application Development — Android', org:'BASIS Institute of Technology and Management (BITM)', desc:'<strong>Projects:</strong> Tour Mate & Daily Expense Note', meta:['Java, XML, Firebase, SQLite','BITM'] },
+];
+
+const certs = [
+  { icon:'brain', title:'Machine Learning Specialization', org:'Stanford Online & DeepLearning.AI', desc:'Supervised learning, unsupervised learning, and best practices in machine learning.', tags:['ML','Neural networks','Python'], link:'https://www.coursera.org/account/accomplishments/specialization/NSWBU7MN6K94' },
+  { icon:'brain', title:'Deep Learning Specialization', org:'DeepLearning.AI', desc:'Advanced deep learning: CNNs, RNNs, LSTMs, attention mechanisms and transformers.', tags:['Deep learning','CNN','RNN'], link:'https://www.credly.com/badges/c3a826e4-8041-45e1-9d72-8460ef702501/public_url' },
+  { icon:'sigma', title:'Mathematics for ML & DS', org:'DeepLearning.AI', desc:'Linear algebra, calculus, probability & statistics for machine learning and data science.', tags:['Linear algebra','Calculus','Statistics'], link:'https://www.coursera.org/account/accomplishments/specialization/WYL5YL8YQV62' },
+  { icon:'code', title:'NLP Specialization', org:'DeepLearning.AI', desc:'NLP with classification, probabilistic models, sequence models and attention models.', tags:['NLP','Transformers','BERT'], link:'https://www.coursera.org/account/accomplishments/specialization/7FBZQDX4DA9A' },
+  { icon:'sigma', title:'Google Data Analytics', org:'Google', desc:'Data cleaning, analysis, visualization and statistical methods.', tags:['Data analysis','SQL','Tableau'], link:'https://www.credly.com/badges/76032062-286e-40ce-a3de-a6df4b4c483d/public_url' },
+  { icon:'code', title:'Python for Everybody', org:'University of Michigan', desc:'Python programming, data structures, web scraping, databases and visualization.', tags:['Python','Web scraping','SQL'], link:'https://www.coursera.org/account/accomplishments/specialization/certificate/PNUMXMSWENMM' },
+  { icon:'brain', title:'Computational Neuroscience', org:'Neuromatch Academy', desc:'Interactive 128-hour track. Project: Mapping Information Flow & Choice Representations in the Mouse Brain.', tags:['Deep learning','CNN','RNN'], link:'https://portal.neuromatchacademy.org/certificate/ff202913-f5e2-41ec-80d5-bd7236537079' },
+  { icon:'brain', title:'Deep Learning', org:'Neuromatch Academy', desc:'Interactive 128-hour track. Project: Deep Learning for Sentiment Analysis on Stanford Sentiment Treebank.', tags:['Deep learning','CNN','RNN'], link:'https://portal.neuromatchacademy.org/certificate/fba0e3bb-27bd-422b-9033-119e4d930352' },
+  { icon:'flag', title:'NASA Open Science', org:'NASA TOPS', desc:'Advancing open science practices, transparency, and scientific research impact.', tags:['Open Science','Data'], link:'https://www.credly.com/badges/71c9b03c-7219-4522-b666-924d1aecefd4/public_url' },
+];
+const certsExtra = [
+  { icon:'compass', title:'Womanium AstroBiology 2023', org:'Womanium', desc:'Intro topics in astrobiology and original design of a scientific space mission (Enceladus Challenge).', tags:['Space','Astrobiology'], link:'https://www.virtualbadge.io/certificate-validator?credential=d7e5543d-6cc8-4680-aa06-633bf87ac9d7' },
+  { icon:'atom', title:'Qiskit Summer School 2023', org:'IBM Quantum | Qiskit', desc:'Theory to implementation — 2-week intensive program; 12 lectures & 5 labs on quantum computing.', tags:['Qiskit','Quantum','QML'], link:'https://www.credly.com/badges/3e07d372-6874-448b-b82b-57d4b09d1e57/public_url' },
+  { icon:'atom', title:'Qiskit Summer School 2021', org:'IBM Quantum | Qiskit', desc:'Quantum machine learning — 2-week intensive course on QML fundamentals, algorithms and hardware.', tags:['Qiskit','QML'], link:'https://drive.google.com/file/d/1N8ENNaCCljY8TNeuueiHvpDWZagcBAlk/view' },
+  { icon:'atom', title:'QWorld Summer School 2021', org:'QWorld', desc:'Quantum computing and programming — QSilver and QBronze diploma.', tags:['Quantum','Python'], link:'https://drive.google.com/file/d/1N8ENNaCCljY8TNeuueiHvpDWZagcBAlk/view' },
+  { icon:'atom', title:'Global QC Program 2023', org:'Womanium', desc:'Quantum computing & programming, QKD, quantum software, hardware, sensing, error correction.', tags:['Quantum','Math'], link:'https://www.virtualbadge.io/certificate-validator?credential=20769f11-4b92-4bbf-a1e1-5b0f1b9da608' },
+  { icon:'atom', title:'Intro to Quantum Computing', org:'The Coding School | QubitXQubit', desc:'Quantum mechanics, quantum information and computation, and quantum hardware.', tags:['Quantum','Python'], link:'https://verified.sertifier.com/en/verify/47335505410338/' },
+  { icon:'brain', title:'Computational Neuroscience', org:'University of Washington', desc:'Computational methods for understanding nervous systems: vision, sensory-motor control, learning, memory.', tags:['Neuroscience','Brain'], link:'https://www.coursera.org/account/accomplishments/certificate/KJY3QFVZQZ9B' },
+  { icon:'dna', title:'Genomic Data Science', org:'Johns Hopkins University', desc:'Genomic technologies, Python for genomics, DNA sequencing, Bioconductor, statistics for genomics.', tags:['Genomics','Bioinformatics'], link:'https://www.coursera.org/account/accomplishments/specialization/certificate/KE2LN9SVY6S9' },
+  { icon:'flag', title:'Google Project Management', org:'Google', desc:'Initiating, planning and running traditional and agile projects.', tags:['PM','Agile'], link:'https://www.credly.com/badges/3e649266-f2f7-4148-aa8e-016de51afd71/public_url' },
+  { icon:'brain', title:'Elements of AI', org:'University of Helsinki', desc:'What AI is, what is possible with AI, and how it affects our lives.', tags:['AI','ML'], link:'https://certificates.mooc.fi/validate/ljwtjqupwq8' },
+  { icon:'code', title:'Generative AI with LLM', org:'DeepLearning.AI | AWS', desc:'GenAI project life cycle, fine-tuning LLMs, RLHF and generative AI best practices.', tags:['LLM','GenAI','RLHF'], link:'https://www.coursera.org/account/accomplishments/verify/R5ASZZJFBA7J' },
+  { icon:'code', title:'Machine Learning for NLP', org:'Innovative Skills', desc:'AI concepts, ML, deep learning, NLP, LLM, agentic AI and GenAI with hands-on labs.', tags:['AI','ML','NLP'], link:'https://innovativeskillsbd.com/public/course-single/machine-learning-for-natural-language-processing' },
+  { icon:'brain', title:'Womanium Quantum + AI 2024', org:'Womanium', desc:'Quantum algorithms & programming, AI, QML. Project: QML for conspicuity detection in production.', tags:['QML','Quantum','Python'], link:'https://womanium.org/Quantum/AI' },
+  { icon:'atom', title:'Advanced End-to-end QC', org:'QURECA', desc:'ADEQUATE course — complete overview of established quantum algorithms and computational techniques.', tags:['Quantum computing','QML'], link:'https://lms.qureca.com/certificate-verifier/?code=2863-174-421-3830&v=c419b06b4c65' },
+];
+
+const blogs = [
+  { date:'September 2025', title:'From LeNet to ConvNeXt: A Telenovela of Convolutions', desc:'From detecting tumors in medical scans to spotting memes, CNNs quietly run the show behind almost every image-based AI application today.', link:'https://medium.com/@tanjinadnanabir/from-lenet-to-convnext-a-telenovela-of-convolutions-drama-and-world-domination-9656ebd90f8d' },
+  { date:'July 2025', title:'The Pre-AGI Era', desc:'In the grand narrative of intelligence, we are at a turning point — a period of rapid narrow-AI advancement, foundational experiments and deep philosophical questions.', link:'https://medium.com/@tanjinadnanabir/the-pre-agi-era-humanitys-last-stand-as-the-sole-general-intelligence-ceca9e69e320' },
+  { date:'May 2025', title:'Spacetime: The Fundamental Fabric of the Universe', desc:'Spacetime is one of the most profound concepts in modern physics, uniting space and time into a single continuum.', link:'https://medium.com/@tanjinadnanabir/spacetime-the-fundamental-fabric-of-the-universe-0c3639dbd54f' },
+  { date:'November 2024', title:'The Art of Writing Good Prompts', desc:'Imagine having a conversation with an AI that feels intuitive and nearly human — it all begins with how you ask.', link:'https://medium.com/@tanjinadnanabir/the-art-of-writing-good-prompts-and-interacting-with-genai-platforms-like-chatgpt-fdeaee81ca3f' },
+  { date:'September 2024', title:'Reimagining Education', desc:'Shorter schooling, more hands-on learning, and flexible college programs could help students become skilled and ready for a fast-changing world.', link:'https://medium.com/@tanjinadnanabir/reimagining-education-building-an-effective-practical-schooling-system-in-bangladesh-34a781142e55' },
+  { date:'June 2024', title:'কোয়ান্টাম কম্পিউটারের জাদুকরি জগৎ', desc:'মানুষের কল্পনাশক্তি আর প্রযুক্তির বিকাশ একসঙ্গে এগিয়ে চলেছে, আর তারই এক চূড়ান্ত উদাহরণ কোয়ান্টাম কম্পিউটার।', link:'https://medium.com/@tanjinadnanabir/কোয়ান্টাম-কম্পিউটারের-জাদুকরি-জগৎ-3f529bf80b99' },
+];
+const blogsExtra = [
+  { date:'March 2024', title:'Mastering Computer Vision: A Comprehensive Overview', desc:'Computer vision at the intersection of AI and image processing — core concepts and methodologies shaping modern systems.', link:'https://medium.com/@tanjinadnanabir/mastering-computer-vision-a-comprehensive-overview-b976fa6de1e6' },
+  { date:'February 2024', title:'Womanium Quantum+AI Journey 2024', desc:'The story of my Womanium Quantum+AI journey — training, project and achievements from June to August 2024.', link:'https://medium.com/@tanjinadnanabir/womanium-quantum-ai-journey-2024-b337b334d2a8' },
+  { date:'January 2024', title:'The Hidden Challenge Behind Training LLMs', desc:"The biggest hurdle in training large language models isn't smarter architectures or bigger datasets — it's memory management.", link:'https://medium.com/@tanjinadnanabir/the-hidden-challenge-behind-training-large-language-models-memory-c8e87bf04828' },
+  { date:'June 2024', title:'Unraveling the Mysteries of String Theory', desc:'String theory attempts to answer some of the most profound questions about the universe, aiming to unify all fundamental forces and particles.', link:'https://medium.com/@tanjinadnanabir/unraveling-the-mysteries-of-string-theory-88359aa751b4' },
+];
+
+/* Hobbies — image src paths point to /images/hobbies/, replace with real photos.
+   If an image fails to load, a styled placeholder is shown automatically. */
+const hobbies = [
+  { cat:'travel', icon:'plane', label:'Travel', title:'Hill-town morning', src:'images/hobbies/travel-1.jpg' },
+  { cat:'travel', icon:'compass', label:'Travel', title:'Coastal wander', src:'images/hobbies/travel-2.jpg' },
+  { cat:'travel', icon:'plane', label:'Travel', title:'City skyline', src:'images/hobbies/travel-3.jpg' },
+  { cat:'travel', icon:'compass', label:'Travel', title:'River crossing', src:'images/hobbies/travel-4.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Street frame', src:'images/hobbies/photo-1.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Long exposure', src:'images/hobbies/photo-2.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Golden hour', src:'images/hobbies/photo-3.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Macro detail', src:'images/hobbies/photo-4.jpg' },
+  { cat:'events', icon:'camera', label:'Events', title:'Strategy & puzzle nights', src:'images/hobbies/event-1.jpg' },
+  { cat:'events', icon:'camera', label:'Events', title:'Sci-fi & sim worlds', src:'images/hobbies/event-2.jpg' },
+  { cat:'events', icon:'camera', label:'Events', title:'Co-op sessions', src:'images/hobbies/event-3.jpg' },
+  { cat:'events', icon:'camera', label:'Events', title:'Speed-run brain teasers', src:'images/hobbies/event-4.jpg' },
+  { cat:'gaming', icon:'gamepad', label:'Gaming', title:'Strategy & puzzle nights', src:'images/hobbies/gaming-1.jpg' },
+  { cat:'gaming', icon:'gamepad', label:'Gaming', title:'Sci-fi & sim worlds', src:'images/hobbies/gaming-2.jpg' },
+  { cat:'gaming', icon:'gamepad', label:'Gaming', title:'Co-op sessions', src:'images/hobbies/gaming-3.jpg' },
+  { cat:'gaming', icon:'gamepad', label:'Gaming', title:'Speed-run brain teasers', src:'images/hobbies/gaming-4.jpg' },
+  { cat:'design', icon:'palette', label:'Creative design', title:'UI concept work', src:'images/hobbies/design-1.jpg' },
+  { cat:'design', icon:'palette', label:'Creative design', title:'Poster & type study', src:'images/hobbies/design-2.jpg' },
+  { cat:'design', icon:'palette', label:'Creative design', title:'Brand explorations', src:'images/hobbies/design-3.jpg' },
+  { cat:'design', icon:'palette', label:'Creative design', title:'Brand explorations', src:'images/hobbies/design-4.jpg' },
+  { cat:'other', icon:'pen', label:'Writing', title:'Notebook sketches', src:'images/hobbies/other-1.jpg' },
+  { cat:'other', icon:'book', label:'Reading', title:'Current stack', src:'images/hobbies/other-2.jpg' },
+];
+const hobbiesExtra = [
+  { cat:'travel', icon:'compass', label:'Travel', title:'Mountain trail', src:'images/hobbies/travel-5.jpg' },
+  { cat:'travel', icon:'plane', label:'Travel', title:'Old town alley', src:'images/hobbies/travel-6.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Night sky', src:'images/hobbies/photo-5.jpg' },
+  { cat:'photography', icon:'camera', label:'Photography', title:'Portrait study', src:'images/hobbies/photo-6.jpg' },
+  { cat:'gaming', icon:'gamepad', label:'Gaming', title:'Tournament night', src:'images/hobbies/gaming-5.jpg' },
+  { cat:'design', icon:'palette', label:'Creative design', title:'Motion & prototyping', src:'images/hobbies/design-4.jpg' },
+  { cat:'other', icon:'pen', label:'Writing', title:'Essay drafts', src:'images/hobbies/other-3.jpg' },
+  { cat:'other', icon:'compass', label:'Exploring', title:'Weekend wandering', src:'images/hobbies/other-4.jpg' },
+];
+
+/* ============================================================
+   RENDER HELPERS
+   ============================================================ */
+function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content; }
+
+function renderSkills(){
+  document.getElementById('skillsGrid').append(el(skillCards.map(s=>`
+    <div class="skill-card">
+      <div class="skill-icon">${icon(s.icon)}</div>
+      <h4>${s.title}</h4>
+      <p>${s.desc}</p>
+      <div class="mini-tags">${s.tags.map(t=>`<span class="mini-tag">${t}</span>`).join('')}</div>
+    </div>`).join('')));
+}
+
+function renderStack(){
+  document.getElementById('stackWrap').append(el(stack.map(([n,c])=>
+    `<span class="stack-chip"><i style="background:${c}"></i>${n}</span>`).join('')));
+}
+
+function projectCard(p){
+  return `<div class="proj-card">
+    <div class="proj-icon">${icon(p.icon)}</div>
+    <div class="proj-title">${p.title}</div>
+    <p class="proj-desc">${p.desc}</p>
+    <div class="proj-tags">${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>
+    <div class="proj-links">${p.links.map(([label,href],i)=>`<a href="${href}" target="_blank" rel="noopener" class="proj-link${i===0?' primary':''}">${label}</a>`).join('')}</div>
+  </div>`;
+}
+function renderProjects(){
+  document.getElementById('projectsGrid').append(el(projects.map(projectCard).join('')));
+  document.getElementById('projectsModalGrid').append(el(projectsExtra.map(projectCard).join('')));
+}
+
+function tlItem(t){
+  return `<div class="tl-item">
+    ${t.year?`<div class="tl-year">${t.year}</div>`:''}
+    <div class="tl-title">${t.title}</div>
+    <div class="tl-org">${t.org}${t.gpa?` &middot; ${t.gpa}`:''}</div>
+    ${t.desc?`<div class="tl-desc">${t.desc}</div>`:''}
+    <div class="tl-meta">${t.meta.map(m=>`<span>${m}</span>`).join('')}</div>
+  </div>`;
+}
+function renderTimelines(){
+  document.getElementById('experienceTimeline').append(el(experienceTL.map(tlItem).join('')));
+  document.getElementById('educationTimeline').append(el(educationTL.map(tlItem).join('')));
+  document.getElementById('trainingTimeline').append(el(trainingTL.map(tlItem).join('')));
+}
+
+function certCard(c){
+  return `<div class="cert-card">
+    <div class="skill-icon" style="width:28px;height:28px;margin-bottom:.7rem;color:var(--accent-3);">${icon(c.icon)}</div>
+    <div class="cert-title">${c.title}</div>
+    <div class="cert-org">${c.org}</div>
+    <p class="cert-desc">${c.desc}</p>
+    <div class="cert-tags">${c.tags.map(t=>`<span class="cert-tag">${t}</span>`).join('')}</div>
+    <a href="${c.link}" target="_blank" rel="noopener" class="cert-link">View certificate</a>
+  </div>`;
+}
+function renderCerts(){
+  document.getElementById('certsGrid').append(el(certs.map(certCard).join('')));
+  document.getElementById('certsModalGrid').append(el(certsExtra.map(certCard).join('')));
+}
+
+function blogCard(b){
+  return `<div class="blog-card">
+    <div class="blog-date">${b.date}</div>
+    <div class="blog-title">${b.title}</div>
+    <p class="blog-desc">${b.desc}</p>
+    <a href="${b.link}" target="_blank" rel="noopener" class="blog-link">Read the piece</a>
+  </div>`;
+}
+function renderBlogs(){
+  document.getElementById('blogGrid').append(el(blogs.map(blogCard).join('')));
+  document.getElementById('blogModalGrid').append(el(blogsExtra.map(blogCard).join('')));
+}
+
+function hobbyCard(h){
+  return `<div class="hobby-card" data-cat="${h.cat}">
+    <img src="${h.src}" alt="${h.title}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="ph" style="display:none;">${icon(h.icon)}<small>${h.label}</small></div>
+    <div class="cap">${h.title}</div>
+  </div>`;
+}
+function renderHobbies(){
+  document.getElementById('hobbyGallery').append(el(hobbies.map(hobbyCard).join('')));
+  document.getElementById('hobbiesModalGrid').append(el(hobbiesExtra.map(hobbyCard).join('')));
+}
+
+renderSkills(); renderStack(); renderProjects(); renderTimelines(); renderCerts(); renderBlogs(); renderHobbies();
+
+/* ============================================================
+   THEME TOGGLE (in-memory only, no storage — starts in premium dark mode)
+   ============================================================ */
+(function(){
+  const root = document.documentElement;
+  const toggle = document.getElementById('themeToggle');
+  function apply(theme){ root.setAttribute('data-theme', theme); }
+  apply('dark');
+  toggle.addEventListener('click', ()=>{
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    apply(next);
+  });
+})();
+
+/* ============================================================
+   MODALS — generic open/close for About / Projects / Certifications / Hobbies / Writing
+   ============================================================ */
+(function(){
+  const openers = [
+    ['moreAboutBtn','aboutModal'],
+    ['projectsMoreBtn','projectsModal'],
+    ['certsMoreBtn','certsModal'],
+    ['hobbiesMoreBtn','hobbiesModal'],
+    ['blogMoreBtn','blogModal'],
+  ];
+  function openModal(overlay){
+    overlay.classList.add('open');
+    document.body.classList.add('modal-lock');
+  }
+  function closeModal(overlay){
+    overlay.classList.remove('open');
+    document.body.classList.remove('modal-lock');
+  }
+  openers.forEach(([btnId, modalId])=>{
+    const btn = document.getElementById(btnId);
+    const overlay = document.getElementById(modalId);
+    if(!btn || !overlay) return;
+    btn.addEventListener('click', ()=> openModal(overlay));
+    overlay.addEventListener('click', (e)=>{ if(e.target === overlay) closeModal(overlay); });
+    overlay.querySelectorAll('[data-close], .modal-close').forEach(x=>x.addEventListener('click', ()=> closeModal(overlay)));
+  });
+  window.addEventListener('keydown', (e)=>{
+    if(e.key !== 'Escape') return;
+    document.querySelectorAll('.modal-overlay.open').forEach(o=> closeModal(o));
+  });
+})();
+
+/* ============================================================
+   NAV: mobile menu, active link, scroll-top
+   ============================================================ */
+(function(){
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  const navOverlay = document.getElementById('navOverlay');
+  function closeMenu(){
+    hamburger.classList.remove('open'); navLinks.classList.remove('open');
+    if(navOverlay) navOverlay.classList.remove('open');
+    document.body.classList.remove('modal-lock');
+  }
+  hamburger.addEventListener('click', ()=>{
+    const open = hamburger.classList.toggle('open');
+    navLinks.classList.toggle('open', open);
+    if(navOverlay) navOverlay.classList.toggle('open', open);
+    document.body.classList.toggle('modal-lock', open);
+  });
+  if(navOverlay) navOverlay.addEventListener('click', closeMenu);
+  navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeMenu));
+
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', ()=>{
+    let current = '';
+    sections.forEach(s=>{
+      const rect = s.getBoundingClientRect();
+      if(rect.top <= 120 && rect.bottom >= 120) current = s.id;
+    });
+    links.forEach(l=> l.classList.toggle('active', l.getAttribute('href') === '#'+current));
+
+    const scrollTop = document.getElementById('scrollTop');
+    scrollTop.classList.toggle('show', window.scrollY > 600);
+  }, {passive:true});
+})();
+
+/* ============================================================
+   TABS — education/training
+   ============================================================ */
+(function(){
+  document.querySelectorAll('.tabs').forEach(group=>{
+    group.querySelectorAll('.tab-btn[data-tab]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        group.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.dataset.tab;
+        document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+        document.getElementById('tab-'+target).classList.add('active');
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   HOBBY FILTER TABS
+   ============================================================ */
+(function(){
+  const tabs = document.querySelectorAll('.hobby-tabs .tab-btn');
+  const cards = ()=> document.querySelectorAll('#hobbyGallery .hobby-card');
+  tabs.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      tabs.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.hobby;
+      cards().forEach(c=>{
+        c.style.display = (cat==='all' || c.dataset.cat===cat) ? '' : 'none';
+      });
+    });
+  });
+})();
+
+/* ============================================================
+   ROLE TYPEWRITER
+   ============================================================ */
+(function(){
+  const roles = ['Computer Scientist','AI / ML Researcher','Quantum Explorer','Computational Neuroscientist','STEM Educator','Builder'];
+  const target = document.getElementById('roleType');
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){ return; }
+  let ri = 0, ci = 0, deleting = false;
+  function tick(){
+    const word = roles[ri];
+    ci += deleting ? -1 : 1;
+    target.textContent = word.slice(0, ci);
+    let delay = deleting ? 35 : 55;
+    if(!deleting && ci === word.length){ delay = 1400; deleting = true; }
+    else if(deleting && ci === 0){ deleting = false; ri = (ri+1) % roles.length; delay = 300; }
+    setTimeout(tick, delay);
+  }
+  tick();
+})();
+
+/* ============================================================
+   ABOUT SECTION — precisely align the avatar card's top with the
+   visual top of the heading text, regardless of font metrics,
+   viewport width, or webfont load timing (measured, not guessed).
+   ============================================================ */
+(function(){
+  const heading = document.getElementById('aboutHeading');
+  const side = document.getElementById('aboutSide');
+  if(!heading || !side) return;
+  function align(){
+    side.style.marginTop = '0px';
+    const headTop = heading.getBoundingClientRect().top;
+    const sideTop = side.getBoundingClientRect().top;
+    const delta = headTop - sideTop;
+    side.style.marginTop = (delta > 0 ? delta : 0) + 'px';
+  }
+  align();
+  window.addEventListener('resize', align);
+  if(document.fonts && document.fonts.ready){ document.fonts.ready.then(align); }
+  setTimeout(align, 400); // safety pass after any late layout shifts
+})();
+
+/* ============================================================
+   REVEAL ON SCROLL
+   ============================================================ */
+(function(){
+  const targets = document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window) || window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    targets.forEach(t=>t.classList.add('in')); return;
+  }
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.12});
+  targets.forEach(t=>io.observe(t));
+})();
+
+/* ============================================================
+   SHARED PARTICLE FIELD — space / neural-network / quantum-particle
+   canvas used behind the hero and every section, for one consistent
+   background treatment site-wide. Connective lines, twinkle, cursor
+   interaction, and occasional shooting stars; colour + alpha are
+   theme-aware. Section instances are gated by IntersectionObserver
+   so only on-screen canvases actually animate.
+   ============================================================ */
+function createParticleField(canvas, opts){
+  if(!canvas) return;
+  opts = opts || {};
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const density = opts.density || 19000;
+  const maxParticles = opts.maxParticles || 85;
+  const shootingStarsOn = opts.shootingStars !== false;
+  const lineDist = opts.lineDist || 120;
+  const alphaScale = opts.alphaScale || 1;
+  let W,H,DPR, running = false;
+
+  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function isDark(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
+  function hexA(color, alpha){
+    if(color.startsWith('#')){
+      let c = color.substring(1);
+      if(c.length===3) c = c.split('').map(x=>x+x).join('');
+      const num = parseInt(c,16);
+      const r=(num>>16)&255, g=(num>>8)&255, b=num&255;
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+    return color;
+  }
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = Math.max(1,W*DPR); canvas.height = Math.max(1,H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const palette = ['--accent','--accent-2','--accent-3'];
+  const N = Math.min(maxParticles, Math.max(14, Math.round((window.innerWidth*window.innerHeight)/density)));
+  const particles = Array.from({length:N}, (_,i)=>({
+    x:Math.random(), y:Math.random(), r:Math.random()*1.5+0.7,
+    vx:(Math.random()-0.5)*0.00035, vy:(Math.random()-0.5)*0.00035,
+    hue: palette[i % palette.length],
+    tw: Math.random()*Math.PI*2, twSpeed: 0.4 + Math.random()*0.8,
+  }));
+
+  let cursor = { x:-9999, y:-9999, active:false };
+  let mx=0.5, my=0.5;
+  window.addEventListener('mousemove', e=>{
+    const rect = canvas.getBoundingClientRect();
+    const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if(inside){ mx = (e.clientX-rect.left) / rect.width; my = (e.clientY - rect.top) / rect.height; }
+    cursor.x = e.clientX - rect.left; cursor.y = e.clientY - rect.top; cursor.active = inside;
+  }, {passive:true});
+  window.addEventListener('mouseleave', ()=>{ cursor.active = false; });
+
+  let shootingStars = [];
+  let nextStarAt = 3 + Math.random()*5;
+
+  function spawnStar(){
+    const fromLeft = Math.random() < 0.5;
+    const y0 = Math.random()*H*0.6;
+    shootingStars.push({
+      x: fromLeft ? -40 : W+40, y: y0,
+      vx: (fromLeft ? 1 : -1) * (5 + Math.random()*3),
+      vy: 1.2 + Math.random()*1.2,
+      life: 1, color: getVar(palette[Math.floor(Math.random()*palette.length)]),
+    });
+  }
+
+  function frame(){
+    if(!running) return;
+    ctx.clearRect(0,0,W,H);
+    const dark = isDark();
+    const parallaxX = (mx-0.5)*16, parallaxY = (my-0.5)*16;
+    const lineAlphaBase = (dark ? 0.16 : 0.22) * alphaScale;
+    const dotAlphaBase = (dark ? 0.65 : 0.75) * alphaScale;
+
+    if(!reduceMotion){
+      particles.forEach(p=>{
+        p.x += p.vx; p.y += p.vy; p.tw += 0.02*p.twSpeed;
+        if(p.x<0||p.x>1) p.vx*=-1; if(p.y<0||p.y>1) p.vy*=-1;
+      });
+      if(cursor.active){
+        particles.forEach(p=>{
+          const px = p.x*W+parallaxX, py = p.y*H+parallaxY;
+          const dx = px-cursor.x, dy = py-cursor.y;
+          const dist = Math.sqrt(dx*dx+dy*dy);
+          if(dist < 90 && dist > 0.01){
+            const force = (1 - dist/90) * 0.6;
+            p.x += (dx/dist) * force / W;
+            p.y += (dy/dist) * force / H;
+          }
+        });
+      }
+      if(shootingStarsOn){
+        nextStarAt -= 1/60;
+        if(nextStarAt <= 0){ spawnStar(); nextStarAt = 6 + Math.random()*9; }
+      }
+    }
+
+    ctx.lineWidth = 1;
+    for(let i=0;i<particles.length;i++){
+      for(let j=i+1;j<particles.length;j++){
+        const a = particles[i], b = particles[j];
+        const dx = (a.x-b.x)*W, dy=(a.y-b.y)*H;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist < lineDist){
+          const ax=a.x*W+parallaxX, ay=a.y*H+parallaxY, bx=b.x*W+parallaxX, by=b.y*H+parallaxY;
+          let alpha = (1-dist/lineDist)*lineAlphaBase;
+          if(cursor.active){
+            const mdx=(ax+bx)/2-cursor.x, mdy=(ay+by)/2-cursor.y;
+            const cdist = Math.sqrt(mdx*mdx+mdy*mdy);
+            if(cdist < 140) alpha += (1-cdist/140)*0.28*alphaScale;
+          }
+          ctx.strokeStyle = hexA(getVar(a.hue), Math.min(alpha,0.9));
+          ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+        }
+      }
+    }
+
+    particles.forEach(p=>{
+      const twinkle = 0.55 + Math.sin(p.tw)*0.45;
+      ctx.beginPath();
+      ctx.arc(p.x*W+parallaxX, p.y*H+parallaxY, p.r, 0, Math.PI*2);
+      ctx.fillStyle = hexA(getVar(p.hue), dotAlphaBase*twinkle);
+      ctx.fill();
+    });
+
+    if(shootingStarsOn){
+      shootingStars.forEach(s=>{
+        if(!reduceMotion){ s.x += s.vx; s.y += s.vy; s.life -= 0.012; }
+        const grad = ctx.createLinearGradient(s.x, s.y, s.x - s.vx*10, s.y - s.vy*10);
+        grad.addColorStop(0, hexA(s.color, Math.max(s.life,0)*0.9));
+        grad.addColorStop(1, hexA(s.color, 0));
+        ctx.strokeStyle = grad; ctx.lineWidth = 1.6;
+        ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x - s.vx*10, s.y - s.vy*10); ctx.stroke();
+        ctx.beginPath(); ctx.arc(s.x,s.y,1.6,0,Math.PI*2);
+        ctx.fillStyle = hexA(s.color, Math.max(s.life,0)); ctx.fill();
+      });
+      shootingStars = shootingStars.filter(s=> s.life > 0 && s.x > -60 && s.x < W+60 && s.y < H+60);
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  function start(){ if(running) return; running = true; resize(); frame(); }
+  function stop(){ running = false; }
+
+  if(opts.gateBySection){
+    new IntersectionObserver((entries)=>{
+      entries.forEach(e=> e.isIntersecting ? start() : stop());
+    }, {threshold:0.01}).observe(opts.gateBySection);
+  } else {
+    start();
+  }
+}
+
+(function(){
+  createParticleField(document.getElementById('heroBgCanvas'), { maxParticles:85, density:19000, shootingStars:true });
+  document.querySelectorAll('.section-particle-canvas').forEach(canvas=>{
+    const section = canvas.closest('section');
+    createParticleField(canvas, {
+      maxParticles: 34, density: 26000, shootingStars: true, lineDist: 110,
+      alphaScale: 0.85, gateBySection: section,
+    });
+  });
+})();
+
+/* ============================================================
+   HERO SIGNATURE VISUAL — "Cosmic Nexus"
+   A layered space + quantum scene: a deep two-depth starfield, a
+   pulsing glowing core, and three tilted orbit rings with comet-
+   trail electrons circling it, plus occasional shooting stars.
+   Mouse adds gentle parallax; everything freezes on
+   prefers-reduced-motion.
+   ============================================================ */
+(function(){
+  const canvas = document.getElementById('fieldCanvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W,H,DPR;
+  function resize(){
+    DPR = Math.min(window.devicePixelRatio||1, 2);
+    const rect = canvas.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+  function getVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function hexA(color, alpha){
+    if(color.startsWith('#')){
+      let c = color.substring(1);
+      if(c.length===3) c = c.split('').map(x=>x+x).join('');
+      const num = parseInt(c,16);
+      const r=(num>>16)&255, g=(num>>8)&255, b=num&255;
+      return `rgba(${r},${g},${b},${alpha})`;
+    }
+    return color;
+  }
+
+  const rings = [
+    { ry:0.42, rot: 0.0,  speed:1.0,  colorVar:'--accent'   },
+    { ry:0.42, rot: 1.05, speed:-0.7, colorVar:'--accent-3' },
+    { ry:0.42, rot: 2.1,  speed:0.55, colorVar:'--accent-2' },
+  ];
+
+  let mx=0, my=0, t=0;
+  canvas.addEventListener('mousemove', e=>{
+    const r = canvas.getBoundingClientRect();
+    mx = (e.clientX - r.left - r.width/2)/r.width;
+    my = (e.clientY - r.top - r.height/2)/r.height;
+  });
+
+  // deep starfield — two depths for subtle parallax
+  const starsFar = Array.from({length:40}, ()=>({
+    x:Math.random(), y:Math.random(), r:Math.random()*1.1+0.4,
+    tw:Math.random()*Math.PI*2, twSpeed:0.3+Math.random()*0.6
+  }));
+  const starsNear = Array.from({length:18}, ()=>({
+    x:Math.random(), y:Math.random(), r:Math.random()*1.4+0.8,
+    tw:Math.random()*Math.PI*2, twSpeed:0.5+Math.random()*0.8
+  }));
+
+  let shootingStars = [];
+  let nextShootAt = 4 + Math.random()*5;
+
+  function frame(){
+    t += reduceMotion ? 0 : 0.008;
+    ctx.clearRect(0,0,W,H);
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const cx = W/2 + mx*8, cy = H/2 + my*8;
+    const orbitR = Math.min(W,H)*0.24;
+
+    // starfield (far layer drifts less with parallax)
+    const drawStars = (stars, depth, sizeMul)=>{
+      stars.forEach(s=>{
+        s.tw += reduceMotion ? 0 : 0.018*s.twSpeed;
+        const tw = 0.4 + Math.sin(s.tw)*0.35 + 0.35;
+        ctx.beginPath();
+        ctx.arc(s.x*W + mx*depth, s.y*H + my*depth, s.r*sizeMul, 0, Math.PI*2);
+        ctx.fillStyle = hexA(getVar('--text'), (dark?0.5:0.35)*tw);
+        ctx.fill();
+      });
+    };
+    drawStars(starsFar, 3, 1);
+    drawStars(starsNear, 8, 1.15);
+
+    // shooting stars, occasional, space-flavoured
+    if(!reduceMotion){
+      nextShootAt -= 1/60;
+      if(nextShootAt <= 0){
+        const fromLeft = Math.random() < 0.5;
+        shootingStars.push({
+          x: fromLeft ? -20 : W+20, y: Math.random()*H*0.5,
+          vx: (fromLeft?1:-1)*(4+Math.random()*2), vy: 1+Math.random(),
+          life:1, color: getVar(['--accent','--accent-2','--accent-3'][Math.floor(Math.random()*3)])
+        });
+        nextShootAt = 7 + Math.random()*8;
+      }
+    }
+    shootingStars.forEach(s=>{
+      if(!reduceMotion){ s.x+=s.vx; s.y+=s.vy; s.life-=0.014; }
+      const grad = ctx.createLinearGradient(s.x,s.y, s.x-s.vx*9, s.y-s.vy*9);
+      grad.addColorStop(0, hexA(s.color, Math.max(s.life,0)*0.85));
+      grad.addColorStop(1, hexA(s.color, 0));
+      ctx.strokeStyle = grad; ctx.lineWidth = 1.3;
+      ctx.beginPath(); ctx.moveTo(s.x,s.y); ctx.lineTo(s.x-s.vx*9, s.y-s.vy*9); ctx.stroke();
+    });
+    shootingStars = shootingStars.filter(s=> s.life>0 && s.x>-60 && s.x<W+60 && s.y<H+60);
+
+    const lineBoost = dark ? 1 : 1.7;
+
+    // orbit rings + electrons with a comet-style trail (atom motif)
+    rings.forEach(ring=>{
+      const rot = ring.rot + t*ring.speed*0.18;
+      ctx.beginPath();
+      ctx.ellipse(cx, cy, orbitR, orbitR*ring.ry, rot, 0, Math.PI*2);
+      ctx.strokeStyle = hexA(getVar(ring.colorVar), Math.min(0.2*lineBoost, 0.75));
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      for(let k=5; k>=1; k--){
+        const ea = t*ring.speed*1.6 - k*0.045*Math.sign(ring.speed||1);
+        const tx0 = orbitR*Math.cos(ea), ty0 = orbitR*ring.ry*Math.sin(ea);
+        const tx = cx + tx0*Math.cos(rot) - ty0*Math.sin(rot);
+        const ty = cy + tx0*Math.sin(rot) + ty0*Math.cos(rot);
+        ctx.beginPath();
+        ctx.arc(tx,ty, 3.6*(1-k/6), 0, Math.PI*2);
+        ctx.fillStyle = hexA(getVar(ring.colorVar), (1-k/6)*0.35);
+        ctx.fill();
+      }
+
+      const ea = t*ring.speed*1.6;
+      const ex0 = orbitR*Math.cos(ea), ey0 = orbitR*ring.ry*Math.sin(ea);
+      const ex = cx + ex0*Math.cos(rot) - ey0*Math.sin(rot);
+      const ey = cy + ex0*Math.sin(rot) + ey0*Math.cos(rot);
+      ctx.beginPath();
+      ctx.arc(ex,ey, 3.6, 0, Math.PI*2);
+      ctx.fillStyle = getVar(ring.colorVar);
+      ctx.shadowColor = getVar(ring.colorVar); ctx.shadowBlur = 9;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    // core — layered pulsing glow (small "sun")
+    const pulseScale = 1 + Math.sin(t*1.6)*0.14;
+    const coreGrad = ctx.createRadialGradient(cx,cy,0,cx,cy,36*pulseScale);
+    coreGrad.addColorStop(0, hexA(getVar('--accent'), 0.65));
+    coreGrad.addColorStop(0.4, hexA(getVar('--accent'), 0.24));
+    coreGrad.addColorStop(1, hexA(getVar('--accent'), 0));
+    ctx.beginPath(); ctx.arc(cx,cy,36*pulseScale,0,Math.PI*2);
+    ctx.fillStyle = coreGrad; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,7,0,Math.PI*2);
+    ctx.fillStyle = getVar('--text'); ctx.fill();
+
+    requestAnimationFrame(frame);
+  }
+
+  new IntersectionObserver(([entry])=>{
+    if(entry.isIntersecting){ requestAnimationFrame(frame); }
+  }, {threshold:0}).observe(canvas);
+})();
+</script>
+</body>
+</html>
